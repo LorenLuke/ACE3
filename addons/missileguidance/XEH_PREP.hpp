@@ -18,6 +18,8 @@ PREP(handleHandoff);
 
 // Attack Profiles
 PREP(attackProfile_AIR);
+PREP(attackProfile_AA);
+PREP(attackProfile_BOMB);
 PREP(attackProfile_DIR);
 PREP(attackProfile_HI);
 PREP(attackProfile_LIN);
@@ -28,5 +30,8 @@ PREP(attackProfile_JAV_DIR);
 PREP(attackProfile_JAV_TOP);
 
 // Seeker search functions
+PREP(seekerType_AA);
 PREP(seekerType_SALH);
+PREP(seekerType_UNGUIDED);
+PREP(seekerType_GPS);
 PREP(seekerType_Optic);

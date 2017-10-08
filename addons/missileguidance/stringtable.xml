@@ -113,6 +113,48 @@
             <Japanese>Hellfire II AGM-114K レーザ誘導ミサイル</Japanese>
             <Korean>Hellfire II AGM-114K 레이저 유도 미사일</Korean>
         </Key>
+        <Key ID="STR_ACE_MissileGuidance_GBU_12">
+            <English>GBU-12 Paveway II</English>
+            <Spanish>GBU-12 Paveway II</Spanish>
+            <French>GBU-12 Paveway II</French>
+            <Polish>GBU-12 Paveway II</Polish>
+            <German>GBU-12 Paveway II</German>
+            <Czech>GBU-12 Paveway II</Czech>
+            <Italian>GBU-12 Paveway II</Italian>
+            <Portuguese>GBU-12 Paveway II</Portuguese>
+            <Hungarian>GBU-12 Paveway II</Hungarian>
+            <Russian>GBU-12 Paveway II</Russian>
+            <Japanese>GBU-12 Paveway II</Japanese>
+            <Korean>GBU-12 Paveway II</Korean>
+        </Key>
+        <Key ID="STR_ACE_MissileGuidance_GBU_12_Short">
+            <English>GBU-12</English>
+            <Spanish>GBU-12</Spanish>
+            <French>GBU-12</French>
+            <Polish>GBU-12</Polish>
+            <German>GBU-12</German>
+            <Czech>GBU-12</Czech>
+            <Italian>GBU-12</Italian>
+            <Portuguese>GBU-12</Portuguese>
+            <Hungarian>GBU-12</Hungarian>
+            <Russian>GBU-12</Russian>
+            <Japanese>GBU-12</Japanese>
+            <Korean>GBU-12</Korean>
+        </Key>
+        <Key ID="STR_ACE_MissileGuidance_GBU_12_desc">
+            <English>GBU-12 Paveway II Laser-Guided Bomb</English>
+            <Spanish>GBU-12 Paveway II Laser-Guided Bomb</Spanish>
+            <French>GBU-12 Paveway II Laser-Guided Bomb</French>
+            <Polish>GBU-12 Paveway II Laser-Guided Bomb</Polish>
+            <German>GBU-12 Paveway II Laser-Guided Bomb</German>
+            <Czech>GBU-12 Paveway II Laser-Guided Bomb</Czech>
+            <Italian>GBU-12 Paveway II Laser-Guided Bomb</Italian>
+            <Portuguese>GBU-12 Paveway II Laser-Guided Bomb</Portuguese>
+            <Hungarian>GBU-12 Paveway II Laser-Guided Bomb</Hungarian>
+            <Russian>GBU-12 Paveway II Laser-Guided Bomb</Russian>
+            <Japanese>GBU-12 Paveway II Laser-Guided Bomb</Japanese>
+            <Korean>GBU-12 Paveway II Laser-Guided Bomb</Korean>
+        </Key>
         <Key ID="STR_ACE_MissileGuidance_Off">
             <English>Off</English>
             <Polish>Wyłącz</Polish>

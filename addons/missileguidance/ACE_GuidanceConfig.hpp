@@ -1,4 +1,25 @@
 class GVAR(AttackProfiles) {
+    class AA {
+        name = "";
+        visualName = "";
+        description = "";
+
+        functionName = QFUNC(attackProfile_AA);
+    };
+    class AIR {
+        name = "";
+        visualName = "";
+        description = "";
+
+        functionName = QFUNC(attackProfile_AIR);
+    };
+	class BOMB {
+		name = "";
+		visualName = "";
+		description = "";
+		
+		functionName = QFUNC(attackProfile_BOMB);
+	};
     class LIN {
         name = "";
         visualName = "";
@@ -58,4 +79,34 @@ class GVAR(SeekerTypes) {
 
         functionName = QFUNC(seekerType_Optic);
     };
+    class AA {
+        name = "";
+        visualName = "";
+        description = "";
+
+        functionName = QFUNC(seekerType_AA);
+    };
+	
+    class UNGUIDED {
+        name = "";
+        visualName = "";
+        description = "";
+
+        functionName = QFUNC(seekerType_UNGUIDED);
+    };
+    class GPS {
+        name = "";
+        visualName = "";
+        description = "";
+
+        functionName = QFUNC(seekerType_GPS);
+    };
+    class SACLOS {
+        name = "";
+        visualName = "";
+        description = "";
+
+        functionName = QFUNC(seekerType_SACLOS);
+    };
+	
 };

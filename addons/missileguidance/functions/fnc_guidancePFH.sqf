@@ -17,6 +17,8 @@
 // #define DEBUG_MODE_FULL
 #include "script_component.hpp"
 
+
+
 BEGIN_COUNTER(guidancePFH);
 
 #define TIMESTEP_FACTOR 0.01
@@ -26,6 +28,7 @@ _args params ["_firedEH", "_launchParams", "_flightParams", "_seekerParams", "_s
 _firedEH params ["_shooter","","","","_ammo","","_projectile"];
 _launchParams params ["","_targetLaunchParams"];
 _stateParams params ["_lastRunTime", "_seekerStateParams", "_attackProfileStateParams", "_lastKnownPosState"];
+
 
 if (!alive _projectile || isNull _projectile || isNull _shooter) exitWith {
     [_pfID] call CBA_fnc_removePerFrameHandler;
@@ -50,9 +53,15 @@ private _maxDeflection = (_flightParams select 1) * _adjustTime;
 private _projectilePos = getPosASL _projectile;
 
 // Run seeker function:
+// private _seekerReturnedParams = [[0,0,0], _args, _seekerStateParams, _lastKnownPosState] call FUNC(doSeekerSearch);
+// private _seekerTargetPos = _seekerReturnedParams select 0;
+
 private _seekerTargetPos = [[0,0,0], _args, _seekerStateParams, _lastKnownPosState] call FUNC(doSeekerSearch);
 
 // Run attack profile function:
+// private _profileReturnedParams = [_seekerTargetPos, _args, _attackProfileStateParams] call FUNC(doAttackProfile);
+// private __profileAdjustedTargetPos  = _profileReturnedParams select 0;
+
 private _profileAdjustedTargetPos = [_seekerTargetPos, _args, _attackProfileStateParams] call FUNC(doAttackProfile);
 
 // If we have no seeker target, then do not change anything

@@ -24,6 +24,7 @@ _launchParams params ["", "", "_seekerTypeName"];
 _lastKnownPosState params ["_seekLastTargetPos", "_lastKnownPos"];
 
 private _seekerFunction = getText (configFile >> QGVAR(SeekerTypes) >> _seekerTypeName >> "functionName");
+hintSilent format ["%1",_seekerFunction];
 
 private _seekerTargetPos = _this call (missionNamespace getVariable _seekerFunction);
 
