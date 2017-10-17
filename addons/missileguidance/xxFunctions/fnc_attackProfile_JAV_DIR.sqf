@@ -1,6 +1,6 @@
 /*
  * Author: jaynus / nou
- * Attack profile: Javelin Top
+ * Attack profile: Javelin Dir
  *
  * Arguments:
  * 0: Seeker Target PosASL <ARRAY>
@@ -11,7 +11,7 @@
  * Missile Aim PosASL <ARRAY>
  *
  * Example:
- * [[1,2,3], [], []] call ace_missileguidance_fnc_attackProfile_JAV_TOP;
+ * [[1,2,3], [], []] call ace_missileguidance_fnc_attackProfile_JAV_DIR;
  *
  * Public: No
  */
@@ -23,9 +23,10 @@
 #define STAGE_COAST 3
 #define STAGE_TERMINAL 4
 
-params ["_seekerTargetPos", "_args", "_attackProfileStateParams"];
+params ["_seekerTargetPos", "_args", "_attackProfileStateParams", "_feedback"];
 _args params ["_firedEH"];
 _firedEH params ["_shooter","","","","","","_projectile"];
+_feedback params ["_timeDelta", "_seekerTypeName", "_attackProfileName", "_seekerFeedbackArray", "_attackProfileFeedbackArray"];
 
 if (_seekerTargetPos isEqualTo [0,0,0]) exitWith {_seekerTargetPos};
 
@@ -45,7 +46,7 @@ TRACE_2("", _distanceToTarget, _distanceToShooter);
 // Add height depending on distance for compensate
 private _returnTargetPos = _seekerTargetPos;
 
-switch( (_attackProfileStateParams select 0) ) do {
+switch (_attackProfileStateParams select 0) do {
     case STAGE_LAUNCH: {
         TRACE_1("STAGE_LAUNCH","");
         if (_distanceToShooter < 10) then {
@@ -56,33 +57,16 @@ switch( (_attackProfileStateParams select 0) ) do {
     };
     case STAGE_CLIMB: {
         TRACE_1("STAGE_CLIMB","");
-        private _cruisAlt = 140;
-        if (_distanceShooterToTarget < 1250) then {
-            _cruisAlt = 140 * (_distanceShooterToTarget/1250);
-            TRACE_1("_cruisAlt", _cruisAlt);
-        };
+       private _cruisAlt = 60 * (_distanceShooterToTarget/2000);
+
         if ( ((ASLToAGL _projectilePos) select 2) - ((ASLToAGL _seekerTargetPos) select 2) >= _cruisAlt) then {
-            if (_cruisAlt < 140) then {
-                _attackProfileStateParams set [0, STAGE_TERMINAL];
-            } else {
-                _attackProfileStateParams set [0, STAGE_COAST];
-            };
+            _attackProfileStateParams set [0, STAGE_TERMINAL];
         } else {
              _returnTargetPos = _seekerTargetPos vectorAdd [0,0,_distanceToTarget*1.5];
         };
     };
-    case STAGE_COAST: {
-        TRACE_1("STAGE_COAST","");
-        TRACE_1("", ((ASLToAGL _projectilePos) select 2) - (( ASLToAGL _seekerTargetPos) select 2) );
-        if (_distanceToTarget < ( ((ASLToAGL _projectilePos) select 2) - (( ASLToAGL _seekerTargetPos) select 2) ) * 2) then {
-            _attackProfileStateParams set [0, STAGE_TERMINAL];
-        } else {
-            _returnTargetPos = _seekerTargetPos vectorAdd [0,0,(_projectilePos select 2)];
-        };
-    };
     case STAGE_TERMINAL: {
         TRACE_1("STAGE_TERMINAL","");
-        //_returnTargetPos = _seekerTargetPos vectorAdd [0,0,_distanceToTarget * 0.02];
         _returnTargetPos = _seekerTargetPos;
     };
 };

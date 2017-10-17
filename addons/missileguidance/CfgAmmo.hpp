@@ -1,13 +1,16 @@
 class CfgAmmo {
+	
+	//BOMBS AND LGBS
 	class Bomb_04_F;
 	class ACE_BombCore: Bomb_04_F {
         // Begin ACE guidance Configs
 		class ace_missileguidance {
 			enabled = 0;
 			
-			minDeflection = 0.00025;      // Minium flap deflection for guidance
-			maxDeflection = 0.00025;       // Maximum flap deflection for guidance
-			incDeflection = 0.00025;      // The incrmeent in which deflection adjusts.
+			minDeflection = 0.001;      // Minium flap deflection for guidance
+			maxDeflection = 0.001;       // Maximum flap deflection for guidance
+			incDeflection = 0.0002;      // The incrmeent in which deflection adjusts.
+			dlyDeflection = 0;           // Delay in reacting to signal input (simulates angular inertia) in seconds.
 
 			canVanillaLock = 0;          // Can this default vanilla lock? Only applicable to non-cadet mode
 
@@ -19,7 +22,7 @@ class CfgAmmo {
             seekerLockModes[] = { "LOAL" };
 			
             seekerAngle = 30;           // Angle in front of the missile which can be searched
-            seekerAccuracy = 1;         // seeker accuracy multiplier
+			seekerMaxAngle = 0;         // Maximum angle in which the seeker can turn
 			
             seekerMinRange = 1;
             seekerMaxRange = 5000;      // Range from the missile which the seeker can visually search
@@ -36,7 +39,7 @@ class CfgAmmo {
 
 	class ACE_MK82: ACE_BombCore {
         // Begin ACE guidance Configs
-		class ace_missileguidance {
+		class ace_missileguidance: ace_missileguidance {
 			enabled = 0;
 
             // Attack profile type selection
@@ -55,13 +58,11 @@ class CfgAmmo {
 		displayNameShort = "GBU-12";
 		model = "\A3\Weapons_F\Ammo\Bomb_01_fly_F";
 		// Begin ACE guidance Configs
-		class ace_missileguidance {
+		class ace_missileguidance: ace_missileguidance {
 			enabled = 1;
 			
-			minDeflection = 0.0005;      // Minium flap deflection for guidance
-			maxDeflection = 0.0005;       // Maximum flap deflection for guidance
-			incDeflection = 0.0005;      // The incrmeent in which deflection adjusts.
-
+			incDeflection = 0.001;      // The incrmeent in which deflection adjusts.
+			dlyDeflection = 0.15;           // Delay in reacting to signal input (simulates angular inertia) in seconds.
 			canVanillaLock = 0;          // Can this default vanilla lock? Only applicable to non-cadet mode
 
             // Guidance type for munitions
@@ -72,7 +73,6 @@ class CfgAmmo {
             seekerLockModes[] = { "LOAL" };
 			
             seekerAngle = 30;           // Angle in front of the missile which can be searched
-            seekerAccuracy = 1;         // seeker accuracy multiplier
 			
             seekerMinRange = 1;
             seekerMaxRange = 5000;      // Range from the missile which the seeker can visually search
@@ -91,13 +91,9 @@ class CfgAmmo {
 		displayNameShort = "GBU-38";
 
 		// Begin ACE guidance Configs
-		class ace_missileguidance {
+		class ace_missileguidance: ace_missileguidance {
 			enabled = 1;
 			
-			minDeflection = 0.0005;      // Minium flap deflection for guidance
-			maxDeflection = 0.0005;       // Maximum flap deflection for guidance
-			incDeflection = 0.0001;      // The incrmeent in which deflection adjusts.
-
 			canVanillaLock = 0;          // Can this default vanilla lock? Only applicable to non-cadet mode
 
             // Guidance type for munitions
@@ -123,7 +119,7 @@ class CfgAmmo {
 		indirectHit = 1400;
 		indirectHitRange = 22;
         // Begin ACE guidance Configs
-		class ace_missileguidance {
+		class ace_missileguidance: ace_missileguidance {
 			glideRatio = 2.5; 
 		};
 	};
@@ -132,13 +128,11 @@ class CfgAmmo {
 		displayName = "GBU-16 Paveway II";
 		displayNameShort = "GBU-16";
 	// Begin ACE guidance Configs
-		class ace_missileguidance {
+		class ace_missileguidance: ace_missileguidance {
 			enabled = 1;
 			
-			minDeflection = 0.0005;      // Minium flap deflection for guidance
-			maxDeflection = 0.0005;       // Maximum flap deflection for guidance
-			incDeflection = 0.0005;      // The incrmeent in which deflection adjusts.
-
+			incDeflection = 0.001;      // The incrmeent in which deflection adjusts.
+			dlyDeflection = 0.15;           // Delay in reacting to signal input (simulates angular inertia) in seconds.
 			canVanillaLock = 0;          // Can this default vanilla lock? Only applicable to non-cadet mode
 
             // Guidance type for munitions
@@ -149,7 +143,6 @@ class CfgAmmo {
             seekerLockModes[] = { "LOAL" };
 			
             seekerAngle = 30;           // Angle in front of the missile which can be searched
-            seekerAccuracy = 1;         // seeker accuracy multiplier
 			
             seekerMinRange = 1;
             seekerMaxRange = 5000;      // Range from the missile which the seeker can visually search
@@ -168,13 +161,9 @@ class CfgAmmo {
 		displayNameShort = "GBU-32";
 
 		// Begin ACE guidance Configs
-		class ace_missileguidance {
+		class ace_missileguidance: ace_missileguidance {
 			enabled = 1;
 			
-			minDeflection = 0.0005;      // Minium flap deflection for guidance
-			maxDeflection = 0.0005;       // Maximum flap deflection for guidance
-			incDeflection = 0.0001;      // The incrmeent in which deflection adjusts.
-
 			canVanillaLock = 0;          // Can this default vanilla lock? Only applicable to non-cadet mode
 
             // Guidance type for munitions
@@ -198,7 +187,7 @@ class CfgAmmo {
 		indirectHit = 1950;
 		indirectHitRange = 30;
         // Begin ACE guidance Configs
-		class ace_missileguidance {
+		class ace_missileguidance: ace_missileguidance {
 			glideRatio = 2.5; 
 		};
 	};
@@ -208,9 +197,11 @@ class CfgAmmo {
 		displayNameShort = "GBU-10";
 
 		// Begin ACE guidance Configs
-		class ace_missileguidance {
-			enabled = 0;
-			
+		class ace_missileguidance: ace_missileguidance {
+			enabled = 1;
+
+			incDeflection = 0.001;      // The incrmeent in which deflection adjusts.
+			dlyDeflection = 0.15;           // Delay in reacting to signal input (simulates angular inertia) in seconds.			
             // Guidance type for munitions
 			defaultSeekerType = "SALH";
 			seekerTypes[] = { "SALH" };
@@ -219,7 +210,6 @@ class CfgAmmo {
             seekerLockModes[] = { "LOAL" };
 			
             seekerAngle = 30;           // Angle in front of the missile which can be searched
-            seekerAccuracy = 1;         // seeker accuracy multiplier
 			
             seekerMinRange = 1;
             seekerMaxRange = 5000;      // Range from the missile which the seeker can visually search
@@ -240,13 +230,9 @@ class CfgAmmo {
 		displayNameShort = "GBU-31";
 
         // Begin ACE guidance Configs
-		class ace_missileguidance {
+		class ace_missileguidance: ace_missileguidance {
 			enabled = 1;
 			
-			minDeflection = 0.0005;      // Minium flap deflection for guidance
-			maxDeflection = 0.0005;       // Maximum flap deflection for guidance
-			incDeflection = 0.0001;      // The incrmeent in which deflection adjusts.
-
 			canVanillaLock = 0;          // Can this default vanilla lock? Only applicable to non-cadet mode
 
             // Guidance type for munitions
@@ -261,17 +247,22 @@ class CfgAmmo {
 			
 		};
 	};
-	
+
+
+	//Missile guidance
     class MissileCore;
 	class MissileBase: MissileCore {
         // Begin ACE guidance Configs
 		class ace_missileguidance {
-			enabled = 1;
+			enabled = 0;
 			
 			minDeflection = 0.0005;      // Minium flap deflection for guidance
 			maxDeflection = 0.0025;       // Maximum flap deflection for guidance
-			incDeflection = 0.0005;      // The incrmeent in which deflection adjusts.
-
+			incDeflection = 0.0005;      // The increment in which deflection adjusts.
+			dlyDeflection = 0;           // Delay in reacting to signal input (simulates angular inertia) in seconds.
+			
+			canVanillaLock = 1;
+			
             // Guidance type for munitions
 			defaultSeekerType = "UNGUIDED";
 			seekerTypes[] = { "UNGUIDED" };
@@ -280,7 +271,8 @@ class CfgAmmo {
             seekerLockModes[] = { "LOAL" };
 			
             seekerAngle = 90;           // Angle in front of the missile which can be searched
-            seekerAccuracy = 1;         // seeker accuracy multiplier
+			seekerMaxAngle = 0;         // Maximum angle in which the seeker can turn
+			seekerMaxTraverse = 0;       // Maximum rate of traverse that the seeker can turn deg/s
 			
             seekerMinRange = 1;
             seekerMaxRange = 2500;      // Range from the missile which the seeker can visually search
@@ -292,57 +284,78 @@ class CfgAmmo {
 		};
 	};
 
-	class M_Air_AA: MissileBase {
-        // Begin ACE guidance Configs
-		class ace_missileguidance {
+	//SACLOS
+	class M_Scalpel_AT: MissileBase {
+		class ace_missileguidance: ace_missileguidance {
 			enabled = 1;
 			
-			minDeflection = 0.0005;      // Minium flap deflection for guidance
-			maxDeflection = 0.0025;       // Maximum flap deflection for guidance
-			incDeflection = 0.0005;      // The incrmeent in which deflection adjusts.
-
 			canVanillaLock = 0;          // Can this default vanilla lock? Only applicable to non-cadet mode
 
             // Guidance type for munitions
-			defaultSeekerType = "AA";
-			seekerTypes[] = { "AA" };
+			defaultSeekerType = "SACLOS";
+			seekerTypes[] = { "SACLOS" };
 
 			defaultSeekerLockMode = "LOAL";
             seekerLockModes[] = { "LOAL" };
 			
             seekerAngle = 5;           // Angle in front of the missile which can be searched
-            seekerAccuracy = 1;         // seeker accuracy multiplier
 			
             seekerMinRange = 1;
             seekerMaxRange = 2500;      // Range from the missile which the seeker can visually search
 
             // Attack profile type selection
-            defaultAttackProfile = "AIR";
-            attackProfiles[] = { "AIR" };
+            defaultAttackProfile = "LIN";
+            attackProfiles[] = { "LIN" };
+			
+		};
+	};
+	
+	//AA missiles
+	class M_Air_AA: MissileBase {
+        // Begin ACE guidance Configs
+		class ace_missileguidance: ace_missileguidance {
+			enabled = 1;
+			
+			canVanillaLock = 0;          // Can this default vanilla lock? Only applicable to non-cadet mode
+
+            // Guidance type for munitions
+			defaultSeekerType = "AAIR";
+			seekerTypes[] = { "AAIR" };
+
+			defaultSeekerLockMode = "LOAL";
+            seekerLockModes[] = { "LOAL" };
+			
+            seekerAngle = 5;           // Angle in front of the missile which can be searched
+			seekerMaxAngle = 10;         // Maximum angle in which the seeker can turn
+			seekerMaxTraverse = 0;       // Maximum rate of traverse that the seeker can turn deg/s
+			
+            seekerMinRange = 1;
+            seekerMaxRange = 2500;      // Range from the missile which the seeker can visually search
+
+            // Attack profile type selection
+            defaultAttackProfile = "AAIR";
+            attackProfiles[] = { "AAIR" };
 			
 		};
 	};
 
 	class Missile_AA_04_F: MissileBase {
         // Begin ACE guidance Configs
-		class ace_missileguidance {
+		class ace_missileguidance: ace_missileguidance {
 			enabled = 1;
 			
-			minDeflection = 0.0005;      // Minium flap deflection for guidance
-			maxDeflection = 0.0025;       // Maximum flap deflection for guidance
-			incDeflection = 0.0005;      // The incrmeent in which deflection adjusts.
-
 			canVanillaLock = 0;          // Can this default vanilla lock? Only applicable to non-cadet mode
 
             // Guidance type for munitions
-			defaultSeekerType = "AA";
-			seekerTypes[] = { "AA" };
+			defaultSeekerType = "AAIR";
+			seekerTypes[] = { "AAIR" };
 
 			defaultSeekerLockMode = "LOAL";
             seekerLockModes[] = { "LOAL" };
 			
             seekerAngle = 5;           // Angle in front of the missile which can be searched
-            seekerAccuracy = 1;         // seeker accuracy multiplier
+			seekerMaxAngle = 10;         // Maximum angle in which the seeker can turn
+			seekerMaxTraverse = 0;       // Maximum rate of traverse that the seeker can turn deg/s
 			
             seekerMinRange = 1;
             seekerMaxRange = 2500;      // Range from the missile which the seeker can visually search
@@ -353,7 +366,39 @@ class CfgAmmo {
 			
 		};
 	};
-	
+
+
+	class M_Titan_AA: MissileBase {
+        // Begin ACE guidance Configs
+        class ace_missileguidance: ace_missileguidance {
+            enabled = 1;
+
+            canVanillaLock = 0;
+
+            // Guidance type for munitions
+            defaultSeekerType = "AAIR";
+            seekerTypes[] = { "AAIR" };
+
+            defaultSeekerLockMode = "LOBL";
+            seekerLockModes[] = { "LOBL" };
+
+            seekerAngle = 5;           // Angle in front of the missile which can be searched
+			seekerMaxAngle = 10;         // Maximum angle in which the seeker can turn
+			seekerMaxTraverse = 1;       // Maximum rate of traverse that the seeker can turn deg/s
+
+            seekerMinRange = 0;
+            seekerMaxRange = 2500;      // Range from the missile which the seeker can visually search
+
+            //seekLastTargetPos = 1;      // seek last target position [if seeker loses LOS of target, continue to last known pos]
+
+            // Attack profile type selection
+            defaultAttackProfile = "AAIR";
+            attackProfiles[] = { "AAIR" };
+        };
+	};
+
+
+	//laser guided
     class M_PG_AT: MissileBase {};
 	
     class ACE_Hydra70_DAGR: M_PG_AT {
@@ -370,36 +415,63 @@ class CfgAmmo {
 	
         EGVAR(rearm,caliber) = 70;
 	
-        class ace_missileguidance {
+        class ace_missileguidance: ace_missileguidance {
 			enabled = 1;
 			
-            minDeflection = 0.0005;      // Minium flap deflection for guidance
-            maxDeflection = 0.0025;       // Maximum flap deflection for guidance
-            incDeflection = 0.0005;      // The incrmeent in which deflection adjusts.
-
             canVanillaLock = 0;          // Can this default vanilla lock? Only applicable to non-cadet mode
 
             // Guidance type for munitions
             defaultSeekerType = "SALH";
-            seekerTypes[] = { "SALH", "LIDAR", "SARH", "Optic", "Thermal", "GPS", "SACLOS", "MCLOS" };
+            seekerTypes[] = { "SALH", "Optic", "GPS", "SACLOS", "MCLOS" };
 
             defaultSeekerLockMode = "LOAL";
             seekerLockModes[] = { "LOAL", "LOBL" };
 
             seekerAngle = 90;           // Angle in front of the missile which can be searched
-            seekerAccuracy = 1;         // seeker accuracy multiplier
 
             seekerMinRange = 1;
             seekerMaxRange = 2500;      // Range from the missile which the seeker can visually search
 
             // Attack profile type selection
-            defaultAttackProfile = "LIN";
-            attackProfiles[] = { "LIN", "DIR", "MID", "HI" };
+            defaultAttackProfile = "DAGR";
+            attackProfiles[] = { "DAGR", "DIR", "MID", "HI" };
         };
     };
 
+
     // Titan
-    class M_Titan_AT: MissileBase {};
+    class M_Titan_AT: MissileBase {
+        // Begin ACE guidance Configs
+        class ace_missileguidance: ace_missileguidance {
+            enabled = 1;
+	
+            minDeflection = 0.00005;      // Minium flap deflection for guidance
+            maxDeflection = 0.025;       // Maximum flap deflection for guidance
+            incDeflection = 0.00005;      // The incrmeent in which deflection adjusts.
+			dlyDeflection = 0.01;           // Delay in reacting to signal input (simulates angular inertia) in seconds.
+			
+            canVanillaLock = 0;
+
+            // Guidance type for munitions
+            defaultSeekerType = "SACLOS";
+            seekerTypes[] = { "SACLOS" };
+
+            defaultSeekerLockMode = "LOBL";
+            seekerLockModes[] = { "LOBL" };
+
+            seekerAngle = 10;           // Angle in front of the missile which can be searched
+
+            seekerMinRange = 0;
+            seekerMaxRange = 2500;      // Range from the missile which the seeker can visually search
+
+            seekLastTargetPos = 1;      // seek last target position [if seeker loses LOS of target, continue to last known pos]
+
+            // Attack profile type selection
+            defaultAttackProfile = "LIN";
+            attackProfiles[] = { "LIN"};
+        };
+
+	};
 
     class ACE_Javelin_FGM148: M_Titan_AT {
         irLock = 1;
@@ -425,7 +497,8 @@ class CfgAmmo {
             minDeflection = 0.00005;      // Minium flap deflection for guidance
             maxDeflection = 0.025;       // Maximum flap deflection for guidance
             incDeflection = 0.00005;      // The incrmeent in which deflection adjusts.
-
+			dlyDeflection = 0;           // Delay in reacting to signal input (simulates angular inertia) in seconds.
+			
             canVanillaLock = 0;
 
             // Guidance type for munitions
@@ -436,7 +509,6 @@ class CfgAmmo {
             seekerLockModes[] = { "LOBL" };
 
             seekerAngle = 180;           // Angle in front of the missile which can be searched
-            seekerAccuracy = 1;         // seeker accuracy multiplier
 
             seekerMinRange = 0;
             seekerMaxRange = 2500;      // Range from the missile which the seeker can visually search
@@ -454,40 +526,7 @@ class CfgAmmo {
         effectsMissileInit = "RocketBackEffectsStaticRPG";
 
         //Explicity add guidance config
-        class ADDON: ADDON {};
+        class ace_missileguidance: ace_missileguidance {};
 	};
-
-	class M_Titan_AA: MissileBase {
-        // Begin ACE guidance Configs
-        class ace_missileguidance {
-            enabled = 1;
-
-            minDeflection = 0.00005;      // Minium flap deflection for guidance
-            maxDeflection = 0.025;       // Maximum flap deflection for guidance
-            incDeflection = 0.00005;      // The incrmeent in which deflection adjusts.
-
-            canVanillaLock = 0;
-
-            // Guidance type for munitions
-            defaultSeekerType = "AA";
-            seekerTypes[] = { "AA" };
-
-            defaultSeekerLockMode = "LOBL";
-            seekerLockModes[] = { "LOBL" };
-
-            seekerAngle = 5;           // Angle in front of the missile which can be searched
-            seekerAccuracy = 1;         // seeker accuracy multiplier
-
-            seekerMinRange = 0;
-            seekerMaxRange = 2500;      // Range from the missile which the seeker can visually search
-
-            seekLastTargetPos = 1;      // seek last target position [if seeker loses LOS of target, continue to last known pos]
-
-            // Attack profile type selection
-            defaultAttackProfile = "AA";
-            attackProfiles[] = { "AA" };
-        };
-	};
-
 
 };

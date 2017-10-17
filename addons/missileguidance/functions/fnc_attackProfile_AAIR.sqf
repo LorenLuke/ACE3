@@ -1,6 +1,7 @@
 /*
- * Author: jaynus / nou, PabstMirror
- * Do attack profile with a valid seeker target location
+ * Author: jaynus / nou
+ * Attack profile: AIR
+ * TODO: falls back to Linear
  *
  * Arguments:
  * 0: Seeker Target PosASL <ARRAY>
@@ -11,12 +12,11 @@
  * Missile Aim PosASL <ARRAY>
  *
  * Example:
- * [[1,2,3], [], []] call ace_missileguidance_fnc_doAttackProfile;
+ * [[1,2,3], [], []] call ace_missileguidance_fnc_attackProfile_AIR;
  *
  * Public: No
  */
 // #define DEBUG_MODE_FULL
-// #define DRAW_GUIDANCE_INFO
 #include "script_component.hpp"
 
 params ["_seekerTargetPos", "_args"];
@@ -36,19 +36,28 @@ _lastDeviation params ["_deviationX", "_deviationY"];
 
 _ancInfo params ["_ancInfoSeeker", "_ancInfoAttackProfile"];
 
-private _attackProfileFunction = getText (configFile >> QGVAR(AttackProfiles) >> _attackProfileName >> "functionName");
 
-private _attackProfilePos = _this call (missionNamespace getVariable _attackProfileFunction);
+//if no seeker, no problem!
+if (_seekerTargetPos isEqualTo [0,0,0]) exitWith {_seekerTargetPos};
 
-if ((isNil "_attackProfilePos") || {_attackProfilePos isEqualTo [0,0,0]}) exitWith {
-    ERROR_1("attack profile returned bad pos",_attackProfilePos);
-    [0,0,0]
-};
+//
+private _projectilePos = getPosASL _projectile;
+private _projectileDir = vectorDir _projectile;
+private _projectileUp = vectorUp _projectile;
+private _vectorToTarget = _projectilePos vectorFromTo _seekerTargetPos;
+private _projectileBearing = (_projectileDir select 1) atan2 (_projectileDir select 0); 
+private _projectilePitch = asin((_projectileVector) select 2);
 
-#ifdef DRAW_GUIDANCE_INFO
-drawLine3D [(ASLtoAGL _attackProfilePos), (ASLtoAGL _seekerTargetPos), [0,1,1,1]];
-drawIcon3D ["\a3\ui_f\data\IGUI\Cfg\Cursors\selectover_ca.paa", [0,0,1,1], ASLtoAGL _attackProfilePos, 0.5, 0.5, 0, _attackProfileName, 1, 0.025, "TahomaB"];
-#endif
+_vectorToTarget = [_vectorToTarget, _projectileUp, _projectileBearing] call FUNC(vectorRotate);
+_vectorToTarget = [_vectorToTarget, _vectorToTarget vectorCrossProduct _projectileUp, _projectilePitch] call FUNC(vectorRotate);
 
-TRACE_2("return",_attackProfilePos,_attackProfileName);
-_attackProfilePos;
+private _toTargetBearing = (_vectorToTarget select 1) atan2 (_vectorToTarget select 0); 
+private _toTargetPitch = asin((_vectorToTarget) select 2);
+
+_angleToTarget set [0, _toTargetBearing];
+_angleToTarget set [1, _toTargetPitch];
+_lastDeviation set [0, _toTargetBearing - _deviationX];
+_lastDeviation set [1, _toTargetPitch - _deviationY];
+
+//return [X,Y];
+_angleToTarget;

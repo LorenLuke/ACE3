@@ -42,6 +42,7 @@ class CfgMagazines {
 		count = 2;
 		mass = 450;
 		pylonWeapon = "ACE_Mk82BombLauncher";
+//        hardpoints[] = {"UNI_SCALPEL", "B_GBU12_DUAL_RAIL", "I_GBU12_DUAL_RAIL"};
         hardpoints[] = {"UNI_SCALPEL"};
 	};
 
@@ -72,7 +73,7 @@ class CfgMagazines {
 		count = 1;
 		mass = 225;
 		pylonWeapon = "ACE_Mk82BombLauncher";
-        hardpoints[] = {"B_MISSILE_PYLON", "SCALPEL_1RND_EJECTOR", "UNI_SCALPEL"};
+        hardpoints[] = {"UNI_SCALPEL", "B_BOMB_PYLON", "B_GBU12", "I_GBU12", "B_GBU12_DUAL_RAIL", "I_GBU12_DUAL_RAIL"};
 	};
 
 	class PylonMissile_1Rnd_ACE_GBU12: PylonMissile_1Rnd_ACE_Mk82 {
@@ -106,7 +107,7 @@ class CfgMagazines {
 		count = 2;
 		mass = 900;
 		pylonWeapon = "ACE_Mk83BombLauncher";
-        hardpoints[] = {"UNI_SCALPEL"};
+        hardpoints[] = {"UNI_SCALPEL", "B_GBU12_DUAL_RAIL", "I_GBU12_DUAL_RAIL"};
 	};
 
 	class PylonRack_2Rnd_ACE_GBU16: PylonRack_2Rnd_ACE_Mk83 {
@@ -130,7 +131,6 @@ class CfgMagazines {
 		count = 2;
 		mass = 900;
 		pylonWeapon = "ACE_GBU32BombLauncher";
-        hardpoints[] = {"UNI_SCALPEL"};
 	};
 
 	class PylonMissile_1Rnd_ACE_Mk83: PylonRack_2Rnd_ACE_Mk83 {
@@ -140,7 +140,7 @@ class CfgMagazines {
 		count = 1;
 		mass = 450;
 		pylonWeapon = "ACE_Mk83BombLauncher";
-        hardpoints[] = {"B_MISSILE_PYLON", "UNI_SCALPEL"};
+        hardpoints[] = {"UNI_SCALPEL", "B_BOMB_PYLON", "B_GBU12", "I_GBU12", "B_GBU12_DUAL_RAIL", "I_GBU12_DUAL_RAIL"};
 	};
 
 	class PylonMissile_1Rnd_ACE_GBU16: PylonMissile_1Rnd_ACE_Mk83 {
@@ -172,7 +172,7 @@ class CfgMagazines {
 
 		mass = 900;
 		pylonWeapon = "ACE_Mk83BombLauncher";
-        hardpoints[] = {"UNI_SCALPEL"};
+        hardpoints[] = {"UNI_SCALPEL", "B_BOMB_PYLON", "B_GBU12_DUAL_RAIL", "I_GBU12_DUAL_RAIL"};
 	};
 
 	class PylonMissile_1Rnd_ACE_GBU10: PylonMissile_1Rnd_ACE_Mk84 {

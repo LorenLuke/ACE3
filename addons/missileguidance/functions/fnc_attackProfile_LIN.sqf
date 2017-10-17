@@ -18,48 +18,19 @@
 // #define DEBUG_MODE_FULL
 #include "script_component.hpp"
 
-params ["_seekerTargetPos", "_args"];
-_args params ["_firedEH"];
-_firedEH params ["_shooter","","","","","","_projectile"];
+params ["_args", "_feedback"];
+_args params ["_source", "_posASL", "_dir", "_focusDir"];
+_feedback params ["_timeParams", "_seekerParams", "_attackProfileParams", "_ancInfo"];
+_timeParams params ["_lastRunTime", "_timeDelta", "_timeModulus", "_timeModulusThreshold"];
+_seekerParams params ["_seekerName", "_seekerAngle", "_seekerMaxRange", "_seekerHeadMaxAngle", "_seekerHeadMaxTraverse", "_seekerHead"];
+_seekerHead params ["_seekerHeadX", "_seekerHeadY", "_seekerHeadUncaged"];
+
+_attackProfileParams params ["_attackProfileName", "_lastPosState", "_deflectionParameters", "_attackProfileMisc"];
+_deflectionParameters params ["_minDeflection", "_maxDeflection", "_incDeflection", "_dlyDeflection", "_curDeflection"];
+_lastPosState params ["_seekLastTargetPos", "_lastKnownTargetPos"];
+
+_ancInfo params ["_ancInfoSeeker", "_ancInfoAttackProfile"];
 
 if (_seekerTargetPos isEqualTo [0,0,0]) exitWith {_seekerTargetPos};
 
-private _shooterPos = getPosASL _shooter;
-private _projectilePos = getPosASL _projectile;
-
-private _distanceToTarget = _projectilePos vectorDistance _seekerTargetPos;
-private _distanceToShooter = _projectilePos vectorDistance _shooterPos;
-private _distanceShooterToTarget = _shooterPos vectorDistance _seekerTargetPos;
-
-TRACE_2("", _distanceToTarget, _distanceToShooter);
-
-// Add height depending on distance for compensate
-private _addHeight = [0,0,0];
-
-// Always climb an arc on initial launch if we are close to the round
-if ((((ASLtoAGL _projectilePos) select 2) < 5) && {_distanceToShooter < 15}) then {
-    _addHeight = _addHeight vectorAdd [0,0,_distanceToTarget];
-    TRACE_1("climb - near shooter",_addHeight);
-} else {
-    // If we are below the target, increase the climbing arc
-    if (((_projectilePos select 2) < (_seekerTargetPos select 2)) && {_distanceToTarget > 100}) then {
-        _addHeight = _addHeight vectorAdd [0,0, ((_seekerTargetPos select 2) - (_projectilePos select 2))];
-        TRACE_1("climb - below target and far",_addHeight);
-    };
-};
-
-// Handle arcing terminal low for high decent (when projectile above target)
-if ((_projectilePos select 2) > (_seekerTargetPos select 2)) then {
-    if (_distanceToTarget < 100) then {
-        _addHeight = _addHeight vectorDiff [0,0, ((_projectilePos select 2) - (_seekerTargetPos select 2)) * 0.5];
-        TRACE_1("above - close",_addHeight);
-    } else {
-        TRACE_1("above - far",_addHeight);
-        _addHeight = _addHeight vectorAdd [0,0, _distanceToTarget*0.02];
-    };
-};
-
-private _returnTargetPos = _seekerTargetPos vectorAdd _addHeight;
-
-TRACE_2("Adjusted target position",_returnTargetPos,_addHeight);
-_returnTargetPos;
+_seekerTargetPos;

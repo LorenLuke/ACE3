@@ -17,23 +17,24 @@
 // #define DEBUG_MODE_FULL
 #include "script_component.hpp"
 
-params ["", "_args"];
+params ["", "_args", "", "", "_feedback"];
 _args params ["_firedEH", "_launchParams", "", "_seekerParams", "_stateParams"];
 _firedEH params ["","","","","","","_projectile"];
 _launchParams params ["", "_targetParams"];
 _targetParams params ["_target"];
 _seekerParams params ["_seekerAngle", "", "_seekerMaxRange"];
+_feedback params ["_timeDelta", "_seekerTypeName", "_attackProfileName", "_seekerFeedbackArray", "_attackProfileFeedbackArray"];
 
 if (isNil "_target") exitWith {[0,0,0]};
 
 private _foundTargetPos = aimPos _target;
 
 // @TODO: This is seeker LOS and angle checks for LOAL only; LOBL does not need visual
-private _angleOkay = [_projectile, _foundTargetPos, _seekerAngle] call FUNC(checkSeekerAngle);
+private _angleOkay = [getposASL _projectile, vectorDir _projectile, _foundTargetPos, _seekerAngle] call FUNC(checkSeekerAngle);
 
 private _losOkay = false;
 if (_angleOkay) then {
-    _losOkay = [_projectile, _target] call FUNC(checkLos);
+    _losOkay = [getPosASL _projectile, getPosASL _target, _projectile, _target] call FUNC(checkLos);
 };
 TRACE_2("", _angleOkay, _losOkay);
 
