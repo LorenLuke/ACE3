@@ -20,25 +20,21 @@
 
 params ["_shooter","_weapon","_muzzle","_mode","_ammo","_magazine","_projectile"];
 private _feedback = +GVAR(feedbackArray);
+//private _feedback = call compile format ["+GVAR(feedbackArray_%1",ACE_player];
 
-hintSilent "check1";
-// Bail on not missile
+// Bail on not missile; need support for other ammo types tho.
 if (!((_ammo isKindOf "MissileBase") || (_ammo isKindOf "LaserBombCore"))) exitWith {};
-hintSilent "check2";
 
 // Bail if guidance is disabled for this ammo
 if ((getNumber (configFile >> "CfgAmmo" >> _ammo >> "ace_missileguidance" >> "enabled")) != 1) exitWith {
 	hint format ["%1 \n%2", getNumber (configFile >> "CfgAmmo" >> _ammo >> "ace_missileguidance" >> "enabled"),_ammo];
 };
-hintSilent "check3";
 
 // Bail on locality of the projectile, it should be local to us
 if (GVAR(enabled) < 1 || {!local _projectile} ) exitWith {};
-hintSilent "check4";
 
 // Bail if shooter isn't player AND system not enabled for AI:
 if ( !isPlayer _shooter && { GVAR(enabled) < 2 } ) exitWith {};
-hintSilent "check5";
 
 // MissileGuidance is enabled for this shot
 // Uncage seeker, if not

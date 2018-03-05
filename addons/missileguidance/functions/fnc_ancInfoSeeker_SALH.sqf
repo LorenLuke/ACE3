@@ -10,7 +10,7 @@
  * [Laser search code, minimum laser wavelength, maximum laser wavelength] <ARRAY>
  *
  * Example:
- * [[], [], []] call ace_missileguidance_fnc_seekerType_AA;
+ * [[], [], []] call ace_missileguidance_fnc_ancInfo_SALH;
  *
  * Public: No
  */

@@ -125,7 +125,7 @@ class GVAR(AncInfo) { //Ancilliary Info
         visualName = "";
         description = "";
 
-        functionName = QFUNC(ancInfo_SALH);
+        functionName = QFUNC(ancInfoSeeker_SALH);
     };
 
     class Optic {
@@ -133,7 +133,7 @@ class GVAR(AncInfo) { //Ancilliary Info
         visualName = "";
         description = "";
 
-        functionName = QFUNC(ancInfo_UNGUIDED);
+        functionName = QFUNC(ancInfoSeeker_UNGUIDED);
     };
 	
     class AAIR {
@@ -141,7 +141,7 @@ class GVAR(AncInfo) { //Ancilliary Info
         visualName = "";
         description = "";
 
-        functionName = QFUNC(ancInfo_AAIR);
+        functionName = QFUNC(ancInfoSeeker_AAIR);
     };
 
     class GPS {
@@ -149,7 +149,7 @@ class GVAR(AncInfo) { //Ancilliary Info
         visualName = "";
         description = "";
 
-        functionName = QFUNC(ancInfo_GPS);
+        functionName = QFUNC(ancInfoSeeker_GPS);
     };
 
     class SACLOS {
@@ -157,7 +157,7 @@ class GVAR(AncInfo) { //Ancilliary Info
         visualName = "";
         description = "";
 
-        functionName = QFUNC(ancInfo_UNGUIDED);
+        functionName = QFUNC(ancInfoSeeker_UNGUIDED);
     };
 
     class UNGUIDED {
@@ -165,7 +165,7 @@ class GVAR(AncInfo) { //Ancilliary Info
         visualName = "";
         description = "";
 
-        functionName = QFUNC(ancInfo_UNGUIDED);
+        functionName = QFUNC(ancInfoSeeker_UNGUIDED);
     };
 
 	

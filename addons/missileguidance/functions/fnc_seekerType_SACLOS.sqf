@@ -1,7 +1,7 @@
 /*
  * Author: LorenLuke
- * Seeker Type: SACLOS
   *
+ * Seeker Type: SACLOS
  * Arguments:
  * 1: Guidance Arg Array <ARRAY>
  * 2: Seeker State <ARRAY>

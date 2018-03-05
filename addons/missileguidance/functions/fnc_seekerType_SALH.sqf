@@ -44,16 +44,12 @@ private _foundTargetPos = [];
 	if(_angleCheck) then {
 		private _losCheck = [_posASL, getPosASL _x, _source, _x] call FUNC(checkLos); 
 		if(_losCheck) exitWith {
-			_foundTargetPos = getPosASL _x
+			_foundTargetPos = getPosASL _x;
 		};
 	};
 } forEach _laserResult;
 
-if (!(count _foundTargetPos) > 0)
-private _laserResult = [_posASL, _dir, _seekerAngle, _seekerMaxRange, [_wavelengthMin, _wavelengthMax], _code, _source] call EFUNC(laser,seekerFindLaserSpot);
-if (count _laserResult > 0) then {
-	_foundTargetPos = _laserResult select 0;
-} else {
+if (!(count _foundTargetPos) > 0) then {};
 	_foundTargetPos = [0,0,0];
 };
 

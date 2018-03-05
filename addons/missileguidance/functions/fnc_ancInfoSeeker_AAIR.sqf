@@ -10,7 +10,7 @@
  * Vector offset from weapon <ARRAY>
  *
  * Example:
- * [[], [], []] call ace_missileguidance_fnc_seekerType_AA;
+ * [[], [], []] call ace_missileguidance_fnc_ancInfo_AAIR;
  *
  * Public: No
  */

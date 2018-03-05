@@ -36,13 +36,39 @@ _lastDeviation params ["_deviationX", "_deviationY"];
 
 _ancInfo params ["_ancInfoSeeker", "_ancInfoAttackProfile"];
 
+_shooterParams params ["_shooterUnit", "_shooterVehicle", "_shooterWeapon", "_shooterMagazine", "_flyVector"];
+
+//Attack profile ancillary info- unique to each profile;
+//AA
+//seeker active-
+//target angle offset polar
+//target angle offset mag;
+//
+//
+//
+
+private _toVector = _weaponVector;
+private _projectileDir = vectorDir _projectile;
+private _dotProduct = _projectileDir vectorDotProduct _toVector;
+private _angleDif = acos (_dotProduct / ((vectorMagnitude _projectileDir) * (vectorMagnitude _toVector)));
+//off-boresight capability
 
 //if no seeker, no problem!
-if (_seekerTargetPos isEqualTo [0,0,0]) exitWith {_seekerTargetPos};
+
+if (_angleDif >=0.1) exitWith {
+    [0,0];
+} else {
+    _shooterParams set [4, _projectileDir];
+    _seekerHead set [2, true];
+};
+
+
+if (_seekerTargetPos isEqualTo [0,0,0]) exitWith {
+    [0,0];
+};
 
 //
 private _projectilePos = getPosASL _projectile;
-private _projectileDir = vectorDir _projectile;
 private _projectileUp = vectorUp _projectile;
 private _vectorToTarget = _projectilePos vectorFromTo _seekerTargetPos;
 private _projectileBearing = (_projectileDir select 1) atan2 (_projectileDir select 0); 
@@ -54,10 +80,13 @@ _vectorToTarget = [_vectorToTarget, _vectorToTarget vectorCrossProduct _projecti
 private _toTargetBearing = (_vectorToTarget select 1) atan2 (_vectorToTarget select 0); 
 private _toTargetPitch = asin((_vectorToTarget) select 2);
 
-_angleToTarget set [0, _toTargetBearing];
-_angleToTarget set [1, _toTargetPitch];
+private _toTargetPolar = _toTargetBearing atan2 _toTargetPitch;
+private _toTargetAngle = acos (_projectileDir vectorDotProduct _vectorToTarget);
+
 _lastDeviation set [0, _toTargetBearing - _deviationX];
 _lastDeviation set [1, _toTargetPitch - _deviationY];
+_angleToTarget set [0, _toTargetBearing];
+_angleToTarget set [1, _toTargetPitch];
 
-//return [X,Y];
-_angleToTarget;
+//return [polar, amount];
+[_toTargetPolar,_toTargetAngle];

@@ -7,9 +7,9 @@ class CfgAmmo {
 		class ace_missileguidance {
 			enabled = 0;
 			
-			minDeflection = 0.001;      // Minium flap deflection for guidance
+			minDeflection = 0.001;      // Minimum flap deflection for guidance
 			maxDeflection = 0.001;       // Maximum flap deflection for guidance
-			incDeflection = 0.0002;      // The incrmeent in which deflection adjusts.
+			incDeflection = 0.0002;      // The increment in which deflection adjusts (per second).
 			dlyDeflection = 0;           // Delay in reacting to signal input (simulates angular inertia) in seconds.
 
 			canVanillaLock = 0;          // Can this default vanilla lock? Only applicable to non-cadet mode
@@ -61,7 +61,7 @@ class CfgAmmo {
 		class ace_missileguidance: ace_missileguidance {
 			enabled = 1;
 			
-			incDeflection = 0.001;      // The incrmeent in which deflection adjusts.
+			incDeflection = 0.001;      // The increment in which deflection adjusts (per second)..
 			dlyDeflection = 0.15;           // Delay in reacting to signal input (simulates angular inertia) in seconds.
 			canVanillaLock = 0;          // Can this default vanilla lock? Only applicable to non-cadet mode
 
@@ -131,7 +131,7 @@ class CfgAmmo {
 		class ace_missileguidance: ace_missileguidance {
 			enabled = 1;
 			
-			incDeflection = 0.001;      // The incrmeent in which deflection adjusts.
+			incDeflection = 0.001;      // The increment in which deflection adjusts (per second)..
 			dlyDeflection = 0.15;           // Delay in reacting to signal input (simulates angular inertia) in seconds.
 			canVanillaLock = 0;          // Can this default vanilla lock? Only applicable to non-cadet mode
 
@@ -200,7 +200,7 @@ class CfgAmmo {
 		class ace_missileguidance: ace_missileguidance {
 			enabled = 1;
 
-			incDeflection = 0.001;      // The incrmeent in which deflection adjusts.
+			incDeflection = 0.001;      // The increment in which deflection adjusts (per second)..
 			dlyDeflection = 0.15;           // Delay in reacting to signal input (simulates angular inertia) in seconds.			
             // Guidance type for munitions
 			defaultSeekerType = "SALH";
@@ -226,7 +226,7 @@ class CfgAmmo {
 	};
 
 	class ACE_GBU31: ACE_MK84 {
-		displayName = "GBU-32 JDAM";
+		displayName = "GBU-31 JDAM";
 		displayNameShort = "GBU-31";
 
         // Begin ACE guidance Configs
@@ -256,9 +256,9 @@ class CfgAmmo {
 		class ace_missileguidance {
 			enabled = 0;
 			
-			minDeflection = 0.0005;      // Minium flap deflection for guidance
+			minDeflection = 0.0005;      // Minimum flap deflection for guidance
 			maxDeflection = 0.0025;       // Maximum flap deflection for guidance
-			incDeflection = 0.0005;      // The increment in which deflection adjusts.
+			incDeflection = 0.0005;      // The increment in which deflection adjusts (per second)..
 			dlyDeflection = 0;           // Delay in reacting to signal input (simulates angular inertia) in seconds.
 			
 			canVanillaLock = 1;
@@ -445,9 +445,9 @@ class CfgAmmo {
         class ace_missileguidance: ace_missileguidance {
             enabled = 1;
 	
-            minDeflection = 0.00005;      // Minium flap deflection for guidance
+            minDeflection = 0.00005;      // Minimum flap deflection for guidance
             maxDeflection = 0.025;       // Maximum flap deflection for guidance
-            incDeflection = 0.00005;      // The incrmeent in which deflection adjusts.
+            incDeflection = 0.00005;      // The increment in which deflection adjusts (per second)..
 			dlyDeflection = 0.01;           // Delay in reacting to signal input (simulates angular inertia) in seconds.
 			
             canVanillaLock = 0;
@@ -494,9 +494,9 @@ class CfgAmmo {
         class ace_missileguidance {
             enabled = 1;
 	
-            minDeflection = 0.00005;      // Minium flap deflection for guidance
+            minDeflection = 0.00005;      // Minimum flap deflection for guidance
             maxDeflection = 0.025;       // Maximum flap deflection for guidance
-            incDeflection = 0.00005;      // The incrmeent in which deflection adjusts.
+            incDeflection = 0.00005;      // The increment in which deflection adjusts (per second)..
 			dlyDeflection = 0;           // Delay in reacting to signal input (simulates angular inertia) in seconds.
 			
             canVanillaLock = 0;

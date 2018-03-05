@@ -9,6 +9,8 @@ PREP(checkSeekerAngle);
 PREP(onFired);
 PREP(onIncomingMissile);
 
+PREP(preGuidanceAssign);
+PREP(preGuidanceChecker);
 PREP(preGuidancePFH);
 PREP(guidancePFH);
 PREP(doAttackProfile); 
@@ -41,7 +43,9 @@ PREP(seekerType_SACLOS);
 
 //Ancillary Information
 PREP(ancInfo_AAIR);
+PREP(ancInfo_AR);
 PREP(ancInfo_GPS);
+PREP(ancInfo_IR);
 PREP(ancInfo_SALH);
 PREP(ancInfo_SACLOS);
 PREP(ancInfo_UNGUIDED);

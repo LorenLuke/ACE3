@@ -1,16 +1,16 @@
 /*
  * Author: LorenLuke
- * Ancillary information: SALH (Laser info)
+ * Ancillary information: Infrared Ground attack
  *
  * Arguments:
  * 1: Shooter <Object>
  * 2: Target/PosASL <Object/ARRAY>
  *
  * Return Value:
- * [Laser search code, default laser wavelength, default laser wavelength] <ARRAY>
+ * Null
  *
  * Example:
- * [[], [], []] call ace_missileguidance_fnc_seekerType_AA;
+ * [[], [], []] call ace_missileguidance_fnc_ancInfo_IR;
  *
  * Public: No
  */
@@ -19,7 +19,7 @@
 
 params ["_shooter", "_target"];
 
-nil;
+null;
 
 
 
