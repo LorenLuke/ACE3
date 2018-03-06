@@ -17,6 +17,7 @@ PREP(canInteractWithCivilian);
 PREP(getDown);
 PREP(sendAway);
 PREP(canJoinGroup);
+PREP(modifyJoinGroupAction);
 PREP(canJoinTeam);
 PREP(joinTeam);
 PREP(canPassMagazine);
@@ -27,6 +28,8 @@ PREP(canTapShoulder);
 PREP(tapShoulder);
 PREP(canPardon);
 PREP(pardon);
+PREP(canPullOutBody);
+PREP(pullOutBody);
 
 // interaction with doors
 PREP(getDoor);
@@ -39,4 +42,5 @@ PREP(openDoor);
 PREP(canPush);
 PREP(push);
 
+PREP(canFlip);
 PREP(switchLamp);

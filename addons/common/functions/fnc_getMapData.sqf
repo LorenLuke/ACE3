@@ -24,13 +24,14 @@ _map = toLower _map;
 if (_map in ["tanoa"]) exitWith { [-18, 0] };
 if (_map in ["altis"]) exitWith { [40, 0] };
 if (_map in ["stratis"]) exitWith { [40, 0] };
+if (_map in ["malden", "abel"]) exitWith { [38.8, 0] }; // 1.72 Malden and CWR2 Malden
 
 if (_map in ["abbottabad"]) exitWith { [34, 1256] }; // Abbottabad elevation 1256m (Wikipedia)
-if (_map in ["abel"]) exitWith { [39, 0] }; // CWR2 Malden
 if (_map in ["abramia"]) exitWith { [60, 0] };
 if (_map in ["af_kandahar_province"]) exitWith { [42, 0] };
 if (_map in ["angel"]) exitWith { [38, 0] };
 if (_map in ["anim_helvantis_v2"]) exitWith { [50, 0] };
+if (_map in ["anim_starokovka"]) exitWith { [50, 0] };
 if (_map in ["australia"]) exitWith { [-25, 0] };
 if (_map in ["baranow", "ivachev", "panavo", "staszow"]) exitWith { [50, 148.1] }; // IFA3LITE - default elevationOffset
 if (_map in ["beketov"]) exitWith { [55, 0] };

@@ -207,7 +207,24 @@ class CfgVehicles {
         GVAR(dragPosition[]) = {0,1.5,0};
         GVAR(dragDirection) = 90;
     };
+    class Land_PaperBox_01_small_closed_base_F: Items_base_F {
+        GVAR(canCarry) = 1;
+        GVAR(carryPosition[]) = {0,1,1};
+        GVAR(carryDirection) = 0;
 
+        GVAR(canDrag) = 1;
+        GVAR(dragPosition[]) = {0,1.5,0};
+        GVAR(dragDirection) = 90;
+    };
+    class Box_UAV_06_base_F: Items_base_F {
+        GVAR(canCarry) = 1;
+        GVAR(carryPosition[]) = {0,1,1};
+        GVAR(carryDirection) = 0;
+
+        GVAR(canDrag) = 1;
+        GVAR(dragPosition[]) = {0,1.5,0};
+        GVAR(dragDirection) = 0;
+    };
     class ACE_RepairItem_Base: ThingX {};
 
     class ACE_Track: ACE_RepairItem_Base {
@@ -231,5 +248,25 @@ class CfgVehicles {
         GVAR(canDrag) = 1;
         GVAR(dragPosition)[] = {0,1.2,0};
         GVAR(dragDirection) = 180;
+    };
+    class FloatingStructure_F;
+    class Land_Camping_Light_F: FloatingStructure_F {
+        GVAR(canCarry) = 1;
+        // if y < 0.9 player gets damage
+        GVAR(carryPosition)[] = {0,0.9,1};
+        GVAR(carryDirection) = 0;
+
+        GVAR(canDrag) = 1;
+        GVAR(dragPosition)[] = {0,0.7,0};
+        GVAR(dragDirection) = 0;
+    };
+    class Land_Camping_Light_off_F: ThingX {
+        GVAR(canCarry) = 1;
+        GVAR(carryPosition)[] = {0,0.9,1};
+        GVAR(carryDirection) = 0;
+
+        GVAR(canDrag) = 1;
+        GVAR(dragPosition)[] = {0,0.7,0};
+        GVAR(dragDirection) = 0;
     };
 };
