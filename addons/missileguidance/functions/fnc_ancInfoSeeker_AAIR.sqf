@@ -22,7 +22,6 @@ params ["_shooter", "_target"];
 _weaponDir = (vehicle _shooter) weaponDirection (currentWeapon (_shooter));
 private _toTarget = _weaponDir; 
 
-//hint format ["%1\n%2",isNil "_shooter", isNil "_target"];
 
 
 if(!(isNull _target)) then {

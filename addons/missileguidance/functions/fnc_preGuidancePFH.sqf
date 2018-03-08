@@ -121,7 +121,6 @@ _attackProfileParams params ["_attackProfileName", "_lastPosState", "_deflection
 _lastPosState params ["_seekLastTargetPos", "_lastKnownTargetPos"];
 _deflectionParameters params ["_minDeflection", "_maxDeflection", "_incDeflection", "_dlyDeflection", "_curDeflection"];
 
-
 if (!((count _attackProfileMisc) > 0) ) then {
 	_attackprofileMisc pushBack [0,0]; //0-angle to target (from missile boresight)
 	_attackprofileMisc pushBack [0,0]; //1-deviation of target last frame (from previous)
@@ -136,15 +135,6 @@ if (!((count (_ancInfo)) > 0) ) then {
 	_ancInfo pushBack [];  //1- Ancillary attack profile info
 };
 _ancInfo params ["_ancInfoSeeker", "_ancInfoAttackProfile"];
-
-if(!((count (_shooterParams)) > 0) ) then {
-    _shooterParams pushBack objNull; //shooter unit;
-    _shooterParams pushBack objNull; //shooter vehicle;
-    _shooterParams pushBack ""; //weapon
-    _shooterParams pushBack ""; //magazine
-    _shooterParams pushBack []; //intended direction vector; 
-};
-_shooterParams params ["_shooterUnit", "_shooterVehicle", "_shooterWeapon", "_shooterMagazine", "_flyVector"];
 //arrays made
 
 //set our seeker values
@@ -161,16 +151,21 @@ _seekerparams set [3, getNumber ( _config >> "seekerMaxAngle")];
 //_seekerparams set [4, getNumber ( _config >> "seekerMaxTraverse")];
 
 //DEBUG!
-//STINGER = 11, Javelin = 29.4 (~14.7 down);
-_seekerParams set [4, 29.4];
+//1st gen SIDEWINDER =25FOV, 4deg instantaneous (8deg width) 11dg/s
+
+//Javelin = 29.4 (~14.7 down);
+
+_seekerParams set [1, 8];
+_seekerParams set [3, 25];
+_seekerParams set [4, 11];
 _seekerHead set [2, true];
 
 
-//
-_shooterParams set [0, _unit];
-_shooterParams set [1, vehicle _unit];
-_shooterParams set [2, _weapon];
-_shooterParams set [3, _magazine];
+private _attackProfile = _unit getVariable [QGVAR(attackProfile), nil];
+if (isNil "_attackProfile" || {!(_attackProfile in (getArray (_config >> "attackProfiles")))}) then {
+    _attackProfile set [0, getText (_config >> "defaultAttackProfile")];
+};
+_attackProfileParams set [0, _attackProfile];
 
 
 //Start getting and setting values

@@ -18,9 +18,10 @@
 #include "script_component.hpp"
 
 params ["_projectile", "_v"];
+if (!isNull _projectile) then {
+    private _l = sqrt ((_v select 0) ^ 2 + (_v select 1) ^ 2);
+    private _r = -(_v select 2) / _l;
 
-private _l = sqrt ((_v select 0) ^ 2 + (_v select 1) ^ 2);
-private _r = -(_v select 2) / _l;
-
-_projectile setVectorDirAndUp [ _v, [(_v select 0) * _r,(_v select 1) * _r, _l] ];
-_projectile setVelocity (_v vectorMultiply (vectorMagnitude (velocity _projectile)));
+    _projectile setVectorDirAndUp [ _v, [(_v select 0) * _r,(_v select 1) * _r, _l] ];
+    _projectile setVelocity (_v vectorMultiply (vectorMagnitude (velocity _projectile)));
+};

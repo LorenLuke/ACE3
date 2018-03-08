@@ -31,6 +31,25 @@ _lastPosState params ["_seekLastTargetPos", "_lastKnownTargetPos"];
 
 _ancInfo params ["_ancInfoSeeker", "_ancInfoAttackProfile"];
 
-if (_seekerTargetPos isEqualTo [0,0,0]) exitWith {_seekerTargetPos};
+if (_seekerTargetPos isEqualTo [0,0,0]) exitWith {
+    [0,0];
+};
 
 _seekerTargetPos;
+
+private _projectileDir = vectorDir _projectile;
+private _projectileBearing = (_projectileDir select 0) atan2 (_projectileDir select 1);
+private _projectilePitch = (_projectileDir select 2) atan2 sqrt((_projectileDir select 0)^2 + (_projectileDir select 1)^2);
+
+private _projectilePos = getPosASL _projectile;
+private _projectileUp = vectorUp _projectile;
+private _vectorToTarget = _projectilePos vectorFromTo _seekerTargetPos;
+
+_vectorToTarget = [_vectorToTarget, _projectileUp, _projectileBearing] call FUNC(vectorRotate);
+_vectorToTarget = [_vectorToTarget, _vectorToTarget vectorCrossProduct _projectileUp, _projectilePitch] call FUNC(vectorRotate);
+
+private _toTargetBearing = (_vectorToTarget select 1) atan2 (_vectorToTarget select 0); 
+private _toTargetPitch = (_vectorToTarget select 2) atan2 sqrt((_vectorToTarget select 0)^2 + (_vectorToTarget select 1)^2);
+
+
+[_toTargetBearing,_toTargetPitch];

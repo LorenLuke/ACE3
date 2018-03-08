@@ -38,7 +38,9 @@ if ( !isPlayer _shooter && { GVAR(enabled) < 2 } ) exitWith {};
 
 // MissileGuidance is enabled for this shot
 // Uncage seeker, if not
-((_feedback select 1) select 5) set [2, true];
+if ((!isNil "_feedback") && (count _feedback) > 0) then {
+    ((_feedback select 1) select 5) set [2, true];
+};
 
 
 // If we didn't get a target, try to fall back on tab locking
@@ -70,11 +72,13 @@ TRACE_1("",_onFiredFunc);
 if (_onFiredFunc != "") then {
     _args call (missionNamespace getVariable _onFiredFunc);
 };
-        
+
+_this set [7, _shooter weaponDirection _weapon];
 [FUNC(guidancePFH), 0, _args] call CBA_fnc_addPerFrameHandler;
 
 
-/* Clears locking settings
+// Clears locking settings
+/*
 (vehicle _shooter) setVariable [QGVAR(target), nil];
 (vehicle _shooter) setVariable [QGVAR(seekerType), nil];
 (vehicle _shooter) setVariable [QGVAR(attackProfile), nil];

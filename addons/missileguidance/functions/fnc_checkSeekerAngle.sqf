@@ -22,11 +22,10 @@
 
 params ["_seekerPos", "_seekerVector", "_targetPos", "_seekerMaxAngle"];
 
-private _testDifVector = (_targetPos vectorDiff _seekerPos);
-private _testPointVector = vectorNormalized (_testDifVector);
-private _testDotProduct = (vectorNormalized _seekerVector) vectorDotProduct _testPointVector;
+private _toTargetVector = (_seekerPos vectorFromTo _targetPos);
+private _dotProduct = (vectorNormalized _seekerVector) vectorDotProduct _toTargetVector;
 
-if ((acos _testDotProduct) > (_seekerMaxAngle/2)) exitWith {
+if ((acos _dotProduct) > (_seekerMaxAngle/2)) exitWith {
     false;
 };
 

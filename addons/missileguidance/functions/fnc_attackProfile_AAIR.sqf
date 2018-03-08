@@ -21,7 +21,7 @@
 
 params ["_seekerTargetPos", "_args"];
 _args params ["_firedEH", "_feedback"];
-_firedEH params ["_shooter","_weapon","_muzzle","_mode","_ammo","_magazine","_projectile"];
+_firedEH params ["_shooter","_weapon","_muzzle","_mode","_ammo","_magazine","_projectile","_flyVector"];
 _feedback params ["_timeParams", "_seekerParams", "_attackProfileParams", "_ancInfo"];
 _timeParams params ["_lastRunTime", "_timeDelta", "_timeModulus", "_timeModulusThreshold"];
 _seekerParams params ["_seekerName", "_seekerAngle", "_seekerMaxRange", "_seekerHeadMaxAngle", "_seekerHeadMaxTraverse", "_seekerHead"];
@@ -36,8 +36,6 @@ _lastDeviation params ["_deviationX", "_deviationY"];
 
 _ancInfo params ["_ancInfoSeeker", "_ancInfoAttackProfile"];
 
-_shooterParams params ["_shooterUnit", "_shooterVehicle", "_shooterWeapon", "_shooterMagazine", "_flyVector"];
-
 //Attack profile ancillary info- unique to each profile;
 //AA
 //seeker active-
@@ -45,22 +43,35 @@ _shooterParams params ["_shooterUnit", "_shooterVehicle", "_shooterWeapon", "_sh
 //target angle offset mag;
 //
 //
-//
 
-private _toVector = _weaponVector;
 private _projectileDir = vectorDir _projectile;
-private _dotProduct = _projectileDir vectorDotProduct _toVector;
-private _angleDif = acos (_dotProduct / ((vectorMagnitude _projectileDir) * (vectorMagnitude _toVector)));
+private _projectileBearing = (_projectileDir select 0) atan2 (_projectileDir select 1);
+private _projectilePitch = (_projectileDir select 2) atan2 sqrt((_projectileDir select 0)^2 + (_projectileDir select 1)^2);
+
+private _dotProduct = (vectorNormalized _projectileDir) vectorDotProduct (vectorNormalized _flyVector);
+private _angleDif = acos _dotProduct;
 //off-boresight capability
 
 //if no seeker, no problem!
 
-if (_angleDif >=0.1) exitWith {
-    [0,0];
-} else {
-    _shooterParams set [4, _projectileDir];
-    _seekerHead set [2, true];
+if (_angleDif >=0.15 || _seekerHeadUncaged) exitWith {
+    private _flyVectorBearing = (_flyVector select 0) atan2 (_flyVector select 1);
+    private _flyVectorPitch = (_flyVector select 2) atan2 sqrt((_flyVector select 0)^2 + (_flyVector select 1)^2); 
+    private _flyVectorPolar = _flyVectorBearing atan2 _flyVectorPitch;
+    
+    private _vectDiffBearing = _projectileBearing - _flyVectorBearing;
+    private _vectDiffPitch = _flyVectorPitch - _projectilePitch;
+    
+    hint format ["%1\n%2", _vectDiffBearing, _vectDiffPitch];
+
+    [_vectDiffBearing,_vectDiffPitch]
+
+
 };
+
+_firedEH set [7, _projectileDir];
+_seekerHead set [2, true];
+
 
 
 if (_seekerTargetPos isEqualTo [0,0,0]) exitWith {
@@ -71,22 +82,25 @@ if (_seekerTargetPos isEqualTo [0,0,0]) exitWith {
 private _projectilePos = getPosASL _projectile;
 private _projectileUp = vectorUp _projectile;
 private _vectorToTarget = _projectilePos vectorFromTo _seekerTargetPos;
-private _projectileBearing = (_projectileDir select 1) atan2 (_projectileDir select 0); 
-private _projectilePitch = asin((_projectileVector) select 2);
 
 _vectorToTarget = [_vectorToTarget, _projectileUp, _projectileBearing] call FUNC(vectorRotate);
 _vectorToTarget = [_vectorToTarget, _vectorToTarget vectorCrossProduct _projectileUp, _projectilePitch] call FUNC(vectorRotate);
 
 private _toTargetBearing = (_vectorToTarget select 1) atan2 (_vectorToTarget select 0); 
-private _toTargetPitch = asin((_vectorToTarget) select 2);
+private _toTargetPitch = (_vectorToTarget select 2) atan2 sqrt((_vectorToTarget select 0)^2 + (_vectorToTarget select 1)^2);
 
-private _toTargetPolar = _toTargetBearing atan2 _toTargetPitch;
-private _toTargetAngle = acos (_projectileDir vectorDotProduct _vectorToTarget);
+//Boundary protection
+if(sqrt((_toTargetBearing ^ 2) + (_toTargetPitch ^ 2)) > 0) then {
+    private _toTargetPolar = _toTargetBearing atan2 _toTargetPitch;
+    //_toTargetBearing = sin(_toTargetPolar) * _value;
+    //_toTargetPitch = cos(_toTargetPolar) * _value;
+};
 
 _lastDeviation set [0, _toTargetBearing - _deviationX];
 _lastDeviation set [1, _toTargetPitch - _deviationY];
 _angleToTarget set [0, _toTargetBearing];
 _angleToTarget set [1, _toTargetPitch];
 
-//return [polar, amount];
-[_toTargetPolar,_toTargetAngle];
+//return [_x,_y];
+//angle stabilisation;
+[_deviationX,_deviationY];

@@ -36,9 +36,12 @@ _lastDeviation params ["_deviationX", "_deviationY"];
 
 _ancInfo params ["_ancInfoSeeker", "_ancInfoAttackProfile"];
 
+hint format ["[%1]", _attackProfileName];
+
 private _attackProfileFunction = getText (configFile >> QGVAR(AttackProfiles) >> _attackProfileName >> "functionName");
 
 private _attackProfilePos = _this call (missionNamespace getVariable _attackProfileFunction);
+
 
 if ((isNil "_attackProfilePos") || {_attackProfilePos isEqualTo [0,0,0]}) exitWith {
     ERROR_1("attack profile returned bad pos",_attackProfilePos);

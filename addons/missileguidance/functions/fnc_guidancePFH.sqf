@@ -20,15 +20,12 @@
 // #define DRAW_GUIDANCE_INFO
 #include "script_component.hpp"
 #define NEWTON-METERS 1/0.0980665
-
-
 BEGIN_COUNTER(guidancePFH);
-
 #define TIMESTEP_FACTOR 0.01
 
 params ["_args", "_pfID"];
 _args params ["_firedEH", "_feedback"];
-_firedEH params ["_shooter","_weapon","_muzzle","_mode","_ammo","_magazine","_projectile"];
+_firedEH params ["_shooter","_weapon","_muzzle","_mode","_ammo","_magazine","_projectile","_weaponDirection"];
 private _veh = vehicle _shooter;
 
 if (isNull _projectile) then {
@@ -73,7 +70,6 @@ _attackProfileParams params ["_attackProfileName", "_lastPosState", "_deflection
 _lastPosState params ["_seekLastTargetPos", "_lastKnownTargetPos"];
 _deflectionParameters params ["_minDeflection", "_maxDeflection", "_incDeflection", "_dlyDeflection", "_curDeflection"];
 
-
 if (!((count _attackProfileMisc) > 0) ) then {
 	_attackprofileMisc pushBack [0,0]; //0-angle to target (from missile boresight)
 	_attackprofileMisc pushBack [0,0]; //1-deviation of target last frame (from previous)
@@ -89,15 +85,6 @@ if (!((count (_ancInfo)) > 0) ) then {
 	_ancInfo pushBack [];  //1- Ancillary attack profile info
 };
 _ancInfo params ["_ancInfoSeeker", "_ancInfoAttackProfile"];
-
-if(!((count (_shooterParams)) > 0) ) then {
-    _shooterParams pushBack objNull; //shooter unit;
-    _shooterParams pushBack objNull; //shooter vehicle;
-    _shooterParams pushBack ""; //weapon
-    _shooterParams pushBack ""; //magazine
-    _shooterParams pushBack []; //intended direction vector; 
-};
-_shooterParams params ["_shooterUnit", "_shooterVehicle", "_shooterWeapon", "_shooterMagazine", "_flyVector"];
 //arrays made
 
 //set our seeker values
@@ -118,15 +105,26 @@ _seekerparams set [3, getNumber ( _config >> "seekerMaxAngle")];
 _seekerParams set [4, 29.4];
 _seekerHead set [2, false];
 
-
-
-
-
+if (isNil "_attackProfile" || {!(_attackProfile in (getArray (_config >> "attackProfiles")))}) then {
+    _attackProfileParams set [0, getText (_config >> "defaultAttackProfile")];
+};
 
 //get projectile parameters
 private _projectilePos = getPosASL _projectile;
 private _projectileDir = vectorDir _projectile;
 private _projectileUp = vectorUp _projectile;
+
+_vectDiff = _flyVector vectorDiff _projectileDir;
+
+
+private _projectileBearing = (_projectileDir select 0) atan2 (_projectileDir select 1);
+private _projectilePitch = (_projectileDir select 2) atan2 sqrt((_projectileDir select 0)^2 + (_projectileDir select 1)^2);
+
+
+
+
+//private _flyVectorBearing = (_flyVector select 0) atan2 (_flyVector select 1);
+//private _flyVectorPitch (_flyVector select 2) atan2 sqrt((_flyVector select 0)^2 + (_flyVector select 1)^2); 
 
 
 //seekerDir
@@ -143,21 +141,9 @@ private _seekerTargetPos = [[_projectile, _projectilePos, _projectileDir, _seeke
 
 //do attack profile
 private _controlCommands = [_seekerTargetPos, _args] call FUNC(doAttackProfile);
-private _guidanceCommandQueue = [];
-pushBack [_controlCommands, time];
 
 
-private _popped
-
-
-
-
-}
-
-
-
-
-
+//need way to push back guidance commands;
 
 
 
@@ -166,8 +152,11 @@ private _popped
 // If we have no seeker target, then do not change anything
 if (_timeModulus > _timeModulusThreshold) then {
 
-	_unitScalar = _incDeflection * _timeDelta;
-	
+    _unitScalar = _incDeflection * _timeDelta;
+    _controlX = _controlCommands select 0;
+    _controlY = _controlCommands select 1;
+
+    /*
 	_controlX = _curDeflectionX - ((abs(_curDeflectionX) / _curDeflectionX) * _minDeflection);
 	_controlY = _curDeflectionY - ((abs(_curDeflectionY) / _curDeflectionY) * _minDeflection);
 
@@ -179,19 +168,21 @@ if (_timeModulus > _timeModulusThreshold) then {
 
 	_controlX = ((abs(_curDeflectionX) / _curDeflectionX) * _minDeflection) * abs(_controlX min _maxDeflection);
 	_controlY = ((abs(_curDeflectionY) / _curDeflectionY) * _minDeflection) * abs(_controlY min _maxDeflection);
-
-	private _newDir = [_projectileDir, _projectileUp, _controlX] call FUNC(rotateVector);
-	_newDir = [_projectileDir, _projectileUp vectorCrossProduct _projectileDir, _controlY] call FUNC(rotateVector);
-
+    */
+    
+	private _newDir = [_projectileDir, _projectileUp, _controlX/2] call FUNC(rotateVector);
+	_newDir = [_newDir, _newDir vectorCrossProduct _projectileUp, _controlY/2] call FUNC(rotateVector);
 
     if (accTime > 0) then {
         [_projectile, _newDir] call FUNC(changeMissileDirection);
     };
 	
-	_timeParams set [1, _timeModulus % _timeModulusThreshold];
-//	hint format ["%1", _feedback];
+	//_timeParams set [3, _timeModulus % _timeModulusThreshold];
 	
 };
+
+_timeParams set [3, _timeModulus + _timeDelta];
+
 
 #ifdef DRAW_GUIDANCE_INFO
 TRACE_3("",_projectilePos,_seekerTargetPos,_profileAdjustedTargetPos);
@@ -203,6 +194,8 @@ _PS setDropInterval 3.0;
 #endif
 
 _stateParams set [0, diag_tickTime];
+
+
 
 END_COUNTER(guidancePFH);
 

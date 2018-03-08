@@ -46,14 +46,14 @@ _lastDeviation params ["_deviationX", "_deviationY"];
 
 _ancInfo params ["_ancInfoSeeker", "_ancInfoAttackProfile"];
 
-_shooterParams params ["_shooterUnit", "_shooterVehicle", "_shooterWeapon", "_shooterMagazine", "_flyVector"];
-
 private _seekerFunction = getText (configFile >> QGVAR(SeekerTypes) >> _seekerName >> "functionName");
+
+private _dirNormal = vectorNormalized ([_dir, _dir vectorCrossProduct [0,0,1],90] call FUNC(rotateVector));
 
 //Adjusted vector = seeker direction vector
 
-private _adjustedVector = [_dir, [0,0,1], -_seekerHeadX] call FUNC(rotateVector);
-_adjustedVector = [_adjustedVector, _adjustedVector vectorCrossProduct [0,0,1], _seekerHeadY] call FUNC(rotateVector);
+private _adjustedVector = [_dir, _dirNormal, -_seekerHeadX] call FUNC(rotateVector);
+_adjustedVector = [_adjustedVector, _adjustedVector vectorCrossProduct _dirNormal,_seekerHeadY] call FUNC(rotateVector);
 
 //private _adjustedVector = [_dir, [0,0,1], -_angleX] call FUNC(rotateVector);
 //hint format ["%1", _dir];
@@ -83,6 +83,8 @@ if ((isNil "_seekerTargetPos") || {_seekerTargetPos isEqualTo [0,0,0]}) then {
     _lastPosState set [1, _seekerTargetPos];
 };
 
+//_dir = [_dir, _dir vectorCrossProduct [0,1,0], 15.21] call FUNC(rotateVector);
+
 #ifdef DRAW_GUIDANCE_INFO
 drawIcon3D ["\a3\ui_f\data\IGUI\Cfg\Cursors\selectover_ca.paa", [1,0,0,1], ASLtoAGL (_posASL vectorAdd (_dir vectorMultiply (_posASL distance _seekerTargetPos))) , 0.5, 0.5, 0, "aimPos", 1, 0.025, "TahomaB"];
 drawIcon3D ["\a3\ui_f\data\IGUI\Cfg\Cursors\selectover_ca.paa", [0,1,0,1], ASLtoAGL _seekerTargetPos, 0.5, 0.5, 0, "target", 1, 0.025, "TahomaB"];
@@ -111,28 +113,36 @@ if ( (_seekerHeadMaxAngle > 0) && (!(_seekerTargetPos isEqualTo [0,0,0])) ) then
 
     private _rotPolar = _rotBearing atan2 _rotPitch;
     
-	_newSeekerHeadX = _seekerHeadX + ((_rotBearing ) min (sin(_rotPolar) * _unitScalar));
-	_newseekerHeadY = _seekerHeadY + ((_rotPitch ) min (cos(_rotPolar) * _unitScalar));
+    //private _seekerHeadXChange = (abs(_rotBearing)/_rotBearing) * abs((_rotBearing / 4) min (sin(_rotPolar) * _unitScalar));
+    //private _seekerHeadYChange = (abs(_rotPitch)/_rotPitch) *abs((_rotPitch / 4) min (cos(_rotPolar) * _unitScalar));
+    
+    private _seekerHeadXChange = (sin(_rotPolar) * _unitScalar);
+    private _seekerHeadYChange = (cos(_rotPolar) * _unitScalar);
+    
+    
+	_seekerHeadX = _seekerHeadX + _seekerHeadXChange;
+	_seekerHeadY = _seekerHeadY + _seekerHeadYChange;
 
-    if( sqrt( ((_newSeekerHeadX)^2) + ((_newSeekerHeadY)^2) ) > (_seekerHeadMaxAngle - (_seekerAngle / 2)) ) then {
-        _newSeekerheadX = (_seekerHeadMaxAngle - (_seekerAngle / 2)) * sin(_rotPolar);
-        _newSeekerHeadY = (_seekerHeadMaxAngle - (_seekerAngle / 2)) * cos(_rotPolar);
-    };
-   
-    if (abs(_newSeekerHeadX + _newseekerHeadY) > 0) then {
+    if (abs(_seekerHeadX + _seekerHeadY) > 0) then {
 
-	    _lastDeviation set [0, _newSeekerHeadX - _angleX];
-	    _lastDeviation set [1, _newseekerHeadY - _angleY];
-        _angleToTarget set [0, _newSeekerHeadX];
-        _angleToTarget set [1, _newseekerHeadY];
+	    _lastDeviation set [0, _seekerHeadX - _angleX];
+	    _lastDeviation set [1, _seekerHeadY - _angleY];
+        _angleToTarget set [0, _seekerHeadX];
+        _angleToTarget set [1, _seekerHeadY];
 
     };
 
 };
 
+if( sqrt( ((_seekerHeadX)^2) + ((_seekerHeadY)^2) ) > (_seekerHeadMaxAngle - (_seekerAngle / 2)) ) then {
+    _seekerheadX = (_seekerHeadMaxAngle - (_seekerAngle / 2)) * sin(_rotPolar);
+    _seekerHeadY = (_seekerHeadMaxAngle - (_seekerAngle / 2)) * cos(_rotPolar);
+};
+
+
 //    hint format ["%1, %2\n%3, %4\n%5, %6\n%7, %8", _lastDeviation select 0, _lastDeviation select 1, _angleToTarget select 0, _angleToTarget select 1, _seekerHeadX, _seekerHeadY];
-_seekerHead set [0, _newSeekerHeadX];
-_seekerHead set [1, _newSeekerHeadY];
+_seekerHead set [0, _seekerHeadX];
+_seekerHead set [1, _seekerHeadY];
 
 
 _seekerTargetPos;
