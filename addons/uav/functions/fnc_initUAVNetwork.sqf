@@ -6,7 +6,7 @@
  * 0: Network Name <STRING>
  *
  * Return Value:
- * New network created <BOOL>
+ * Nothing
  *
  * Example:
  * None
@@ -17,10 +17,4 @@
 
 params ["_networkName"]; 
 
-private _networkString = format ["ACE_uavNetwork_%1",_networkName];
-if (!isNil (missionNamespace getVariable _networkString)) exitWith {
-    false;
-};
-
-GVAR(ACE_uavNetworks) = GVAR(ACE_uavNetworks) + [_networkString];
-missionNamespace setVariable [_networkString, []];
+GVAR(networks) = GVAR(networks) + [_networkName, [], []];

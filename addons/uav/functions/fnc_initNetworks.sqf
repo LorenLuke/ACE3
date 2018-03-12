@@ -15,4 +15,15 @@
  */
 #include "script_component.hpp"
 
-GVAR(ACE_uavNetworks) = [];
+GVAR(networks) = [];
+
+["networkWEST"] call FUNC(initUAVNetwork);
+["networkEAST"] call FUNC(initUAVNetwork);
+["networkGUER"] call FUNC(initUAVNetwork);
+["networkCIV"]  call FUNC(initUAVNetwork);
+
+["networkWEST", ["B_UavTerminal", true, true, true]] call FUNC(addDeviceToUAVNetwork);
+["networkEAST", ["O_UavTerminal", true, true, true]] call FUNC(addDeviceToUAVNetwork);
+["networkGUER", ["I_UavTerminal", true, true, true]] call FUNC(addDeviceToUAVNetwork);
+["networkCIV",  ["C_UavTerminal", true, true, true]] call FUNC(addDeviceToUAVNetwork);
+
