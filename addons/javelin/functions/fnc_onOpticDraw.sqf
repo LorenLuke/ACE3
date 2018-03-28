@@ -25,6 +25,8 @@
 #define __TRACKINTERVAL 0       // how frequent the ui update should be.
 #define __SCANNTERVAL 0.05      // how frequent the target scan check should be.
 #define __LOCKONTIME 3          // Lock on won't occur sooner
+#define __NFOVTHRESH 0.07       // Numbers less than this on FOV trigger 'NFOV' 
+#define __BLINKTIME 0.5         // Duration in seconds of one on/off
 
 // Pull the arguments
 params ["_lastRunFrame", "_currentTarget", "_lockStartTime", "_soundNextPlayTime", "_fireDisabledEH", "_nextTargetScan"];
@@ -33,6 +35,8 @@ params ["_lastRunFrame", "_currentTarget", "_lockStartTime", "_soundNextPlayTime
 private _currentShooter = if (ACE_player call CBA_fnc_canUseWeapon) then {ACE_player} else {vehicle ACE_player};
 private _currentWeapon = currentWeapon _currentShooter;
 private _currentMagazine = currentMagazine _currentShooter;
+private _blink = (diag_tickTime % __BLINKTIME) > (__BLINKTIME / 2);
+private _zoom = ((call CBA_fnc_getFov) select 0) < __NFOVTHRESH;
 
 // Get weapon / ammo configs
 private _ammoCount = _currentShooter ammo _currentWeapon;
@@ -48,9 +52,8 @@ private _ammoConfig = if (_currentMagazine != "") then {
 if ((_ammoCount == 0) || // No ammo loaded
         {(count _weaponConfig) < 1} || {(getNumber (_weaponConfig select 0)) != 1} || // Not enabled for weapon
         {(count _ammoConfig) < 1} || {(getNumber ((_ammoConfig select 0) >> "enabled")) != 1} // Not enabled for ammo
-        ) exitWith {
+        ) then {
 
-    __JavelinIGUITargeting ctrlShow false;
     __JavelinIGUISeek ctrlSetTextColor __ColorGray;
 
     _fireDisabledEH = [_fireDisabledEH] call FUNC(enableFire);
@@ -76,32 +79,19 @@ if ((velocity ACE_player) distance [0,0,0] > 0.75 && {cameraView == "GUNNER"} &&
 private _offsetX = 0.5 * safeZoneW - safeZoneX - 0.5;
 private _offsetY = 0.5 * safeZoneH - safeZoneY - 0.5;
 
-private _newTarget = objNull;
-if (GVAR(isLockKeyDown) && {cameraView == "GUNNER"} && {(currentVisionMode ACE_player) == 2}) then {
-    // Attempting to lock; getTarget can be  expensive so it's rate is limited
-    if (diag_tickTime > _nextTargetScan) then {
-        BEGIN_COUNTER(getTarget);
-        _newTarget = [_currentTarget, 2500, 0.6] call FUNC(getTarget);
-        END_COUNTER(getTarget);
-        _nextTargetScan = diag_tickTime + __SCANNTERVAL;
-    } else {
-        _newTarget = _currentTarget;
-    };
+if (cameraView == "GUNNER") then {
+    __JavelinIGUITargeting ctrlShow true;
+} else {
+    __JavelinIGUITargeting ctrlShow false;
+};
 
-    // Show gate box
-    private _boundsInput = if (_currentTarget isKindOf "CAManBase") then {
-        [_currentTarget,[-0.5,-0.5,-0.25],[0,0,0]];
-    } else {
-        [_currentTarget,[-1,-1,-1],_currentTarget selectionPosition "zamerny"]; 
-    };
+if (GVAR(isLockKeyDown) && {cameraView == "GUNNER"} && {(currentVisionMode ACE_player) == 2} && {_ammoCount > 0} &&  {_zoom}) then {
 
-    private _bpos = _boundsInput call EFUNC(common,worldToScreenBounds);
-    
-    private _lockTime = if (isNull _currentTarget) then {0} else {CBA_missionTime - _lockStartTime};
-    private _minX = ((linearConversion [1, (__LOCKONTIME - 0.5), _lockTime, 0.5 - 0.075*safeZoneW, (_bpos select 0), true]) + _offsetX) max __ConstraintLeft;
-    private _minY = ((linearConversion [1, (__LOCKONTIME - 0.5), _lockTime, 0.5 - 0.075*safeZoneH, (_bpos select 1), true]) + _offsetY) max __ConstraintTop;
-    private _maxX = (((linearConversion [1, (__LOCKONTIME - 0.5), _lockTime, 0.5 + 0.075*safeZoneW, (_bpos select 2), true]) + _offsetX) min __ConstraintRight) - (0.025 * (3 / 4) * safeZoneH);
-    private _maxY = (((linearConversion [1, (__LOCKONTIME - 0.5), _lockTime, 0.5 + 0.075*safeZoneH, (_bpos select 3), true]) + _offsetY) min __ConstraintBottom) - (0.025 * safeZoneH);
+    [2500, 0.6] call FUNC(getTarget);
+    private _minX = ((linearConversion [0, 1, GVAR(gateDistanceX), 0.5, 0.5 - 0.1*safeZoneW, true]) + _offsetX) max __ConstraintLeft;
+    private _minY = ((linearConversion [0, 1, GVAR(gateDistanceY), 0.5, 0.5 - 0.125*safeZoneH, true]) + _offsetY) max __ConstraintTop;
+    private _maxX = (((linearConversion [0, 1, GVAR(gateDistanceX), 0.5, 0.5 + 0.1*safeZoneW, true]) + _offsetX) min __ConstraintRight) - (0.025 * (3 / 4) * safeZoneW);
+    private _maxY = (((linearConversion [0, 1, GVAR(gateDistanceY), 0.5, 0.5 + 0.125*safeZoneH, true]) + _offsetY) min __ConstraintBottom) - (0.025 * safeZoneH);
 
     // TRACE_3("",_boundsInput,_bpos,_lockTime);
     // TRACE_4("",_minX,_maxX,_minY,_maxY);
@@ -112,13 +102,79 @@ if (GVAR(isLockKeyDown) && {cameraView == "GUNNER"} && {(currentVisionMode ACE_p
     __JavelinIGUITargetingGateBR ctrlSetPosition [_maxX, _maxY];
     {_x ctrlCommit __TRACKINTERVAL} forEach [__JavelinIGUITargetingGateTL, __JavelinIGUITargetingGateTR, __JavelinIGUITargetingGateBL, __JavelinIGUITargetingGateBR];
 
+
+    __JavelinIGUITargetingConstrainTop ctrlShow true;
+    __JavelinIGUITargetingConstrainBottom ctrlShow true;
+    __JavelinIGUITargetingConstrainLeft ctrlShow true;
+    __JavelinIGUITargetingConstrainRight ctrlShow true;
     __JavelinIGUITargeting ctrlShow true;
-    __JavelinIGUITargetingGate ctrlShow true;
+    __JavelinIGUITargetingLines ctrlShow false;
+    __JavelinIGUITargetingGate ctrlShow _blink;
+
+    
+} else {
+    __JavelinIGUITargetingConstrainTop ctrlShow false;
+    __JavelinIGUITargetingConstrainBottom ctrlShow false;
+    __JavelinIGUITargetingConstrainLeft ctrlShow false;
+    __JavelinIGUITargetingConstrainRight ctrlShow false;
+    __JavelinIGUITargetingLines ctrlShow false;
+    __JavelinIGUITargetingGate ctrlShow false;
+
+};
+
+/*
+private _newTarget = objNull;
+if (GVAR(isLockKeyDown) && {cameraView == "GUNNER"} && {(currentVisionMode ACE_player) == 2} && {_ammoCount > 0} &&  {_zoom}) then {
+    // Attempting to lock; getTarget can be  expensive so it's rate is limited
+    if (diag_tickTime > _nextTargetScan) then {
+        BEGIN_COUNTER(getTarget);
+        _newTarget = [_currentTarget, 2500, 0.6] call FUNC(getTarget);
+        END_COUNTER(getTarget);
+        _nextTargetScan = diag_tickTime + __SCANNTERVAL;
+    } else {
+        _newTarget = _currentTarget;
+    };
+    hint format ["%1", _newTarget]
+    // Show gate box
+    private _boundsInput = if (_currentTarget isKindOf "CAManBase") then {
+        [_currentTarget,[-0.5,-0.5,-0.25],[0,0,0]];
+    } else {
+        [_currentTarget,[-1,-1,-1],_currentTarget selectionPosition "zamerny"]; 
+    };
+
+    private _bpos = _boundsInput call EFUNC(common,worldToScreenBounds);
+    
+    private _lockTime = if (isNull _currentTarget) then {0} else {CBA_missionTime - _lockStartTime};
+    
+    private _minX = ((linearConversion [0, 1, GVAR(gateDistanceX), 0.5, 0.5 - 0.1*safeZoneW, true]) + _offsetX) max __ConstraintLeft;
+    private _minY = ((linearConversion [0, 1, GVAR(gateDistanceY), 0.5, 0.5 - 0.125*safeZoneH, true]) + _offsetY) max __ConstraintTop;
+    private _maxX = (((linearConversion [0, 1, GVAR(gateDistanceX), 0.5, 0.5 + 0.1*safeZoneW, true]) + _offsetX) min __ConstraintRight) - (0.025 * (3 / 4) * safeZoneW);
+    private _maxY = (((linearConversion [0, 1, GVAR(gateDistanceY), 0.5, 0.5 + 0.125*safeZoneH, true]) + _offsetY) min __ConstraintBottom) - (0.025 * safeZoneH);
+
+    // TRACE_3("",_boundsInput,_bpos,_lockTime);
+    // TRACE_4("",_minX,_maxX,_minY,_maxY);
+
+    __JavelinIGUITargetingGateTL ctrlSetPosition [_minX, _minY];
+    __JavelinIGUITargetingGateTR ctrlSetPosition [_maxX, _minY];
+    __JavelinIGUITargetingGateBL ctrlSetPosition [_minX, _maxY];
+    __JavelinIGUITargetingGateBR ctrlSetPosition [_maxX, _maxY];
+    {_x ctrlCommit __TRACKINTERVAL} forEach [__JavelinIGUITargetingGateTL, __JavelinIGUITargetingGateTR, __JavelinIGUITargetingGateBL, __JavelinIGUITargetingGateBR];
+
+    __JavelinIGUITargetingConstrainTop ctrlShow true;
+    __JavelinIGUITargetingConstrainBottom ctrlShow true;
+    __JavelinIGUITargetingConstrainLeft ctrlShow true;
+    __JavelinIGUITargetingConstrainRight ctrlShow true;
+    __JavelinIGUITargeting ctrlShow true;
+    __JavelinIGUITargetingGate ctrlShow _blink;
+    __JavelinIGUITargetingLines ctrlShow _blink;
 } else {
     // Not trying to lock
-    __JavelinIGUITargeting ctrlShow false;
-    __JavelinIGUITargetingGate ctrlShow false;
+    __JavelinIGUITargetingConstrainTop ctrlShow false;
+    __JavelinIGUITargetingConstrainBottom ctrlShow false;
+    __JavelinIGUITargetingConstrainLeft ctrlShow false;
+    __JavelinIGUITargetingConstrainRight ctrlShow false;
     __JavelinIGUITargetingLines ctrlShow false;
+    __JavelinIGUITargetingGate ctrlShow false;
 };
 
 if (isNull _newTarget) then {
@@ -142,17 +198,17 @@ if (isNull _newTarget) then {
     if ((CBA_missionTime - _lockStartTime) > __LOCKONTIME) then { // Lock on after 3 seconds
         TRACE_2("LOCKED!", _currentTarget, _lockStartTime);
         __JavelinIGUISeek ctrlSetTextColor __ColorGreen;
-        __JavelinIGUITargetingLines ctrlShow true;
+        __JavelinIGUITargetingLines ctrlShow _blink;
 
         // Move target marker (the crosshair) to aimpoint on the target
         private _aimPointOnTarget = _currentTarget selectionPosition (["zamerny", "body"] select (_currentTarget isKindOf "CAManBase"));
         (worldToScreen (_currentTarget modelToWorld _aimPointOnTarget)) params [["_aposX", 0.5], ["_aposY", 0.5]];
         private _ctrlPos = ctrlPosition __JavelinIGUITargetingLineV;
-        _ctrlPos set [0, _aposX + _offsetX];
+//        _ctrlPos set [0, _aposX + _offsetX];
         __JavelinIGUITargetingLineV ctrlSetPosition _ctrlPos;
         __JavelinIGUITargetingLineV ctrlCommit __TRACKINTERVAL;
         _ctrlPos = ctrlPosition __JavelinIGUITargetingLineH;
-        _ctrlPos set [1, _aposY + _offsetY];
+//        _ctrlPos set [1, _aposY + _offsetY];
         __JavelinIGUITargetingLineH ctrlSetPosition _ctrlPos;
         __JavelinIGUITargetingLineH ctrlCommit __TRACKINTERVAL;
 
@@ -188,3 +244,4 @@ _this set [2, _lockStartTime];
 _this set [3, _soundNextPlayTime];
 _this set [4, _fireDisabledEH];
 _this set [5, _nextTargetScan];
+*/

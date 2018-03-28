@@ -16,9 +16,12 @@
 
 #include "\z\ace\addons\main\script_macros.hpp"
 
-
 // Javelin IGUI defines
 #define __JavelinIGUI (uinamespace getVariable "ACE_RscOptics_javelin")
+
+// FOV Groups
+#define __JavelinNFOVGroup (__JavelinIGUI displayCtrl -1)
+#define __JavelinWFOVGroup (__JavelinIGUI displayCtrl -1)
 
 // Custom controls
 #define __JavelinIGUITargeting (__JavelinIGUI displayCtrl 6999)
@@ -28,9 +31,28 @@
 #define __JavelinIGUIDir (__JavelinIGUI displayCtrl 699002)
 #define __JavelinIGUIRangefinder (__JavelinIGUI displayCtrl 151)
 
+// Placeholders
+#define __JavelinIGUIDAY (__JavelinIGUI displayCtrl -1)
+#define __JavelinIGUIWFOV (__JavelinIGUI displayCtrl -1)
+#define __JavelinIGUINFOV (__JavelinIGUI displayCtrl -1)
+#define __JavelinIGUISEEK (__JavelinIGUI displayCtrl -1)
+
+#define __JavelinIGUITOP (__JavelinIGUI displayCtrl -1)
+#define __JavelinIGUIDIR (__JavelinIGUI displayCtrl -1)
+#define __JavelinIGUIFLTR (__JavelinIGUI displayCtrl -1)
+
+#define __JavelinIGUINOMSL (__JavelinIGUI displayCtrl -1)
+#define __JavelinIGUIMSL (__JavelinIGUI displayCtrl -1)
+#define __JavelinIGUIHANGFIRE (__JavelinIGUI displayCtrl -1)
+#define __JavelinIGUIBCU (__JavelinIGUI displayCtrl -1)
+
+#define __JavelinIGUICLU (__JavelinIGUI displayCtrl -1)
+#define __JavelinIGUICLUFail (__JavelinIGUI displayCtrl -1)
+#define __JavelinIGUINIGHT (__JavelinIGUI displayCtrl -1)
+
 // Constrains
-#define __JavelinIGUITargetingConstrains (__JavelinIGUI displayCtrl 699100)
 #define __JavelinIGUITargetingConstrainTop (__JavelinIGUI displayCtrl 699101)
+#define __JavelinIGUITargetingConstrains (__JavelinIGUI displayCtrl 699100)
 #define __JavelinIGUITargetingConstrainBottom (__JavelinIGUI displayCtrl 699102)
 #define __JavelinIGUITargetingConstrainLeft (__JavelinIGUI displayCtrl 699103)
 #define __JavelinIGUITargetingConstrainRight (__JavelinIGUI displayCtrl 699104)
@@ -59,4 +81,5 @@
 #define __ColorOrange [0.9255,0.5216,0.1216,1]
 #define __ColorGreen [0.2941,0.8745,0.2157,1]
 #define __ColorGray [0.2941,0.2941,0.2941,1]
+#define __COlorRed [0.9255,0.5216,0.1216,1];
 #define __ColorNull [0,0,0,0]
