@@ -439,6 +439,14 @@ class CfgMagazines {
         descriptionShort = CSTRING(5Rnd_127x99_AMAX_Mag_Description);
         initSpeed = 860;
     };
+    class ACE_5Rnd_127x99_Mk211_Mag: 5Rnd_127x108_Mag {
+        author = ECSTRING(common,ACETeam);
+        ammo = "ACE_127x99_Mk211";
+        displayName = CSTRING(5Rnd_127x99_Mk211_Mag_Name);
+        displayNameShort = CSTRING(5Rnd_127x99_API_Mk211_Mag_NameShort);
+        descriptionShort = CSTRING(5Rnd_127x99_API_Mk211_Mag_Description);
+        initSpeed = 890;
+    };
 
 
     class 30Rnd_9x21_Mag: CA_Magazine {

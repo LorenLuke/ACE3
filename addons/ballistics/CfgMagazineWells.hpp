@@ -159,7 +159,8 @@ class CfgMagazineWells {
         ADDON[] = {
             "ACE_5Rnd_127x99_Mag",
             "ACE_5Rnd_127x99_API_Mag",
-            "ACE_5Rnd_127x99_AMAX_Mag"
+            "ACE_5Rnd_127x99_AMAX_Mag",
+            "ACE_5Rnd_127x99_Mk211_Mag"
         };
     };
 

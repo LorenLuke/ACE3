@@ -665,6 +665,34 @@ class CfgAmmo {
         ACE_muzzleVelocities[]={860};
         ACE_barrelLengths[]={736.6};
     };
+    class ACE_127x99_Mk211 : B_127x99_Ball {
+        airFriction=-0.00037397; //Needs calc
+        caliber=5.5; // 19mmRHA at 1000m at 45 deg
+        hit=55;
+        indirectHit=4.5;
+        indirectHitRange=1.75;
+        ACE_caliber=12.98; // https://forum.snipershide.com/threads/g1-and-g7-50-raufoss-mk211-and-nm140.210759/
+        ACE_bulletLength=58.674; // ?
+        ACE_bulletMass=42.7673; // https://forum.snipershide.com/threads/g1-and-g7-50-raufoss-mk211-and-nm140.210759/
+        ACE_muzzleVelocityVariationSD=0.2;
+        ACE_ammoTempMuzzleVelocityShifts[]={-26.55, -25.47, -22.85, -20.12, -16.98, -12.80, -7.64, -1.53, 5.96, 15.17, 26.19};
+        ACE_ballisticCoefficients[]={0.670}; // // https://forum.snipershide.com/threads/g1-and-g7-50-raufoss-mk211-and-nm140.210759/
+        ACE_velocityBoundaries[]={};
+        ACE_standardAtmosphere="ASM";
+        ACE_dragModel=1; // // https://forum.snipershide.com/threads/g1-and-g7-50-raufoss-mk211-and-nm140.210759/
+        ACE_muzzleVelocities[]={889.4064}; // https://guns.fandom.com/wiki/Raufoss_Mk_211
+        ACE_barrelLengths[]={736.6};
+        
+        submunitionAmmo = "ACE_127x99_Mk211_Submunition";
+        submunitionConeType[] = {"poissondisc", 8}; //tungsten fragments
+        submunitionConeAngle = 0.25; 
+        submunitionInitSpeed = 4000;
+
+    };
+    class ACE_127x99_Mk211_Submunition : BulletBase {
+        caliber=0.53; 
+        hit=2.25;
+    };
     class B_127x108_Ball : BulletBase {
         timeToLive=10;
         airFriction=-0.00065098;
