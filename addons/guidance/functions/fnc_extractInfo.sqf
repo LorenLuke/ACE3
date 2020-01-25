@@ -364,4 +364,53 @@ private _miscManeuvering = [_degreesPerSecond, _glideAngle, diag_tickTime, time,
 private _miscSensor = [_sensorAngle, _sensorMinRange, _sensorMaxRange];
 private _miscFuze = [_fuzeVehicle, _fuzeAlt, _fuzeRange, _fuzeTime, _fuzeLoc];
 
-[_seekerType, _attackProfile, _target, _targetPos, _targetVector, _launchPos, _launchTime, _miscManeuvering, _miscSensor, _miscSeeker, _miscProfile, _miscFuze];
+// Setup camera array
+private _cameraConfig = _config >> "camera";
+private _cameraArray = [false];
+if (!(_cameraConfig isEqualTo configNull) && { (getNumber (_cameraConfig >> "enabled")) == 1 }) then {
+    _cameraArray set [0, true];
+    _cameraArray set [1, getArray (_cameraConfig >> "fovLevels")];
+    _cameraArray set [2, getNumber (_cameraConfig >> "initialFOV")];
+    
+    _cameraArray set [3, getArray (_cameraConfig >> "enabledThermalTypes")];
+    _cameraArray set [4, getText (_cameraConfig >> "initialThermalType")];
+    
+    _cameraArray set [5, (getNumber (_cameraConfig >> "switchOnFire")) == 1];
+    
+    _cameraArray set [6, getNumber (_cameraConfig >> "lerpFOV")];
+    _cameraArray set [7, getNumber (_cameraConfig >> "fovChangeTime")];
+    
+    _cameraArray set [8, [[0, 0, 0], [0, 0, 0], [0, 0, 0], false, false]]; // camera view data. [look direction, ground pos, point pos, moving camera x, moving camera y]
+    
+    _cameraArray set [9, [
+        getNumber (_cameraConfig >> "gimbal" >> "enabled") == 1,
+        getNumber (_cameraConfig >> "gimbal" >> "gimbalAngleX"),
+        getNumber (_cameraConfig >> "gimbal" >> "gimbalAngleY"),
+        getNumber (_cameraConfig >> "gimbal" >> "gimbalSpeedX"),
+        getNumber (_cameraConfig >> "gimbal" >> "gimbalSpeedY"),
+        getNumber (_cameraConfig >> "gimbal" >> "gimbalInitOffsetX"),
+        getNumber (_cameraConfig >> "gimbal" >> "gimbalInitOffsetY"),
+        getArray (_cameraConfig >> "gimbal" >> "fovGimbalSpeedModifiers"),
+        getNumber (_cameraConfig >> "gimbal" >> "stabilizeWhenMoving") == 1,
+        getNumber (_cameraConfig >> "gimbal" >> "designateWhenStationary") == 1,
+        getNumber (_cameraConfig >> "gimbal" >> "trackLockedPosition") == 1
+    ]];
+    
+    _cameraArray set [10, [
+        getText (_cameraConfig >> "reticle" >> "titleRsc"),
+        getNumber (_cameraConfig >> "reticle" >> "centerReticle"),
+        getArray (_cameraConfig >> "reticle" >> "controlsToDisappearOnLock"),
+        getArray (_cameraConfig >> "reticle" >> "controlsToAppearOnLock"),
+        getNumber (_cameraConfig >> "reticle" >> "leftGate"),
+        getNumber (_cameraConfig >> "reticle" >> "rightGate"),
+        getNumber (_cameraConfig >> "reticle" >> "topGate"),
+        getNumber (_cameraConfig >> "reticle" >> "bottomGate"),
+        getText (_cameraConfig >> "reticle" >> "uiNamespaceDialogVariable"),
+        getNumber (_cameraConfig >> "reticle" >> "reticleMovesWithTrack") == 1
+    ]];
+    
+    _cameraArray set [11, (getNumber (_cameraConfig >> "alwaysDesignate")) == 1];
+    _cameraArray set [12, (getNumber (_cameraConfig >> "canStopDesignating")) == 1];
+};
+
+[_seekerType, _attackProfile, _target, _targetPos, _targetVector, _launchPos, _launchTime, _miscManeuvering, _miscSensor, _miscSeeker, _miscProfile, _miscFuze, _cameraArray];

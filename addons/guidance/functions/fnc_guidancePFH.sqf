@@ -22,7 +22,7 @@ params ["_args", "_pfID"];
 _args params ["_firedEH","_extractedInfo"];
 
 _firedEH params ["_shooter","_weapon","_muzzle","_mode","_ammo","_magazine","_projectile"];
-_extractedInfo params ["_seekerType", "_attackProfile", "_target", "_targetPos", "_targetVector", "_launchPos", "_launchTime", "_miscManeuvering", "_miscSensor", "_miscSeeker", "_miscProfile", "_miscFuze"];
+_extractedInfo params ["_seekerType", "_attackProfile", "_target", "_targetPos", "_targetVector", "_launchPos", "_launchTime", "_miscManeuvering", "_miscSensor", "_miscSeeker", "_miscProfile", "_miscFuze", "_miscCamera"];
 _miscManeuvering params ["_degreesPerSecond", "_glideAngle", "_lastTickTime", "_lastRunTime", "_runtimeDelta"];
 _miscSensor params ["_seekerAngle", "_seekerMinRange", "_seekerMaxRange"];
 
@@ -30,6 +30,7 @@ _miscFuze params ["_fuzeVehicle", "_fuzeAlt", "_fuzeRange", "_fuzeTime", "_fuzeL
 
 
 if (!alive _projectile || isNull _projectile || isNull _shooter) exitWith {
+    [[_projectile] call FUNC(camera_getCameraNamespaceFromProjectile)] call FUNC(camera_destroy);
     [_pfID] call CBA_fnc_removePerFrameHandler;
     END_COUNTER(guidancePFH);
 };
@@ -64,6 +65,8 @@ if (isNil "_seekerTargetPos") then {
     _seekerTargetPos = [0,0,0];
 };
 
+[_extractedInfo, _projectile, _seekerTargetPos] call FUNC(camera_update);
+
 // Attack Profile Search
 private _attackProfileTargetPos = [_projectile, _shooter, _extractedInfo, _seekerTargetPos] call FUNC(runAttackProfile);
 if (isNil "_attackProfileTargetPos") then {
@@ -81,6 +84,7 @@ if(time - _launchTime > 0.75) then {
 };
 
 if ([_projectile, _miscFuze] call FUNC(checkFuze)) exitWith {
+    [[_projectile] call FUNC(camera_getCameraNamespaceFromProjectile)] call FUNC(camera_destroy);
     [_pfID] call CBA_fnc_removePerFrameHandler;
     END_COUNTER(guidancePFH);
     triggerAmmo _projectile;
