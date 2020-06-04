@@ -9,7 +9,6 @@ _timeArray params ["_runtimeDelta", "_lastRunTime", "_lastTickTime"];
 _targetArray params ["_cursorTarget", "_pilotCameraTarget", "_pilotCameraTargetPos", "_weaponTargetPos", "_eyeTargetPos"];
 //_sensorParams params ["_sensorName", "_sensorFunction", "_active", "_activeOnRail", "_terminal", "_lookDirection", "_angle", "_range", "_priority", "_sensorMisc"];
 _seekerArray params ["_seekerName", "_seekerFunction", "_tracking", "_trackObject", "_trackPoint", "_trackDirection", "_terminalRange", "_terminalAngle", "_seekerMisc"];
-
 _profileArray params ["_profileName", "_profileFunction", "_profileMisc"];
 _launchArray params ["_launched", "_launchTime", "_launchPos", "_launchVehicle", "_launchProjectileVector", "_launchWeaponVector", "_launchInstigatorEyeVector"];
 _flightArray params ["_degreesPerSecond", "_lastFlightVector"];
@@ -91,27 +90,41 @@ if (_tracking) then {
 };
 
 
-[] call FUNC(runSeeker);
+
    
 private _sensorTargetPosition = [0,0,0];
 private _sensorTargetVector = [0,0,0];
 private _divisor = 0;
+private _returns = [];
 {
     _x params ["_sensorName", "_sensorFunction", "_active", "_activeOnRail", "_terminal", "_lookDirection", "_angle", "_range", "_priority", "_sensorMisc"];
     _sensorMisc = [_eh, _x, _seekerArray, _selectedTargetArray] call FUNC(generateSensorMisc);
     _x set [9, _sensorMisc];
-    private _return = [_pos, _eh, _x, _seekerArray, _selectedTargetArray] call FUNC(runSensorSearch);
-    _sensorTargetPosition = _sensorTargetPosition vectorAdd ((_return select 0) vectorMultiply _priority);
-    _sensorTargetVector = _sensorTargetVector vectorAdd ((_return select 1) vectorMultiply _priority);
-    _divisor = _divisor + _priority;
+    private _returnArray = ([_pos, _eh, _x, _seekerArray, _selectedTargetArray] call FUNC(runSensorSearch));
+    _returnArray pushBack _priority;
+    _returns pushback _returnArray;
 } forEach _sensorArray;
 
-if(_divisor != 0) then {
-    _sensorTargetPosition = _sensorTargetPosition vectorMultiply (1/_divisor);
-    _sensorTargetVector = _sensorTargetVector vectorMultiply (1/_divisor);
-};
+{
+    if (!((_x select 0) isEqualTo [0,0,0])) then {
+        private _priority = (_x select 2);
+        _sensorTargetPosition = _sensorTargetPosition vectorAdd ((_x select 0) vectorMultiply _priority);
+        _sensorTargetVector = _sensorTargetVector vectorAdd ((_x select 1) vectorMultiply _priority);
+        _divisor = _divisor + _priority;
+    };
+} forEach _returns;
 
 
+
+
+
+if(_divisor == 0) exitWith {};
+
+_sensorTargetPosition = _sensorTargetPosition vectorMultiply (1/_divisor);
+_sensorTargetVector = _sensorTargetVector vectorMultiply (1/_divisor);
+
+
+[_pos, [_sensorTargetPosition, _sensorTargetVector],_args] call FUNC(runSeeker);
 
 drawIcon3D ["\a3\ui_f\data\IGUI\Cfg\Cursors\selectover_ca.paa", [0.7,0.7,0.7,1], ASLtoAGL _pos, 0.75, 0.75, 0, _ammo, 1, 0.025, "TahomaB"];
 if ( !((_selectedTargetArray select 1) isEqualTo [0,0,0]) ) then {
@@ -130,10 +143,10 @@ if (! ((_sensorTargetPosition select 0) isEqualTo [0,0,0]) ) then {
 };
 
 if (_launched) then {
-    //hint format ["%1", _degreesPerSecond];
     private _velocityVector = velocity _projectile;
-    //private _vectorToFlyPos = _pos vectorFromTo _sensorTargetPositionPosition;
-    if( !(_sensorTargetPosition isEqualTo [0,0,0])) then {
+    private _vectorToFlyPos = _pos vectorFromTo _sensorTargetPosition;
+    if(!(_sensorTargetPosition isEqualTo [0,0,0])) then {
+
         private _vectorToFlyPos = _pos vectorFromTo _sensorTargetPosition;
         private _crossVector = vectorNormalized (_velocityVector vectorCrossProduct _vectorToFlyPos);
         private _angleTo = acos(_velocityVector vectorCos _vectorToFlyPos);
@@ -151,10 +164,10 @@ if (_launched) then {
                 private _r = -(_v select 2);
                 _projectile setVectorDirAndUp [ _v, [(_v select 0) * _r,(_v select 1) * _r, _l] ];
             };
-            hint format ["%1\n%2", _v select 2, sqrt(1 - ((_v select 2)^2))];
         };
     };
 };
+
 
 
 /*

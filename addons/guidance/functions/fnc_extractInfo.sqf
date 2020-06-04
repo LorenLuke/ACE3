@@ -37,10 +37,9 @@ private _sensorArray = [];
     //private _sensorParams [_name, _function, _active, _activeOnRail, _terminal, _lookDirection, _angle, _range, _priority, _misc];
     _sensorArray pushback [_sensorName, _function, _activeOnRail > 0, _activeOnRail > 0, _isTerminalSensor > 0, _unit weaponDirection _weapon, _sensorAngle, _sensorRange, _priority, []];
 } forEach _sensorList;
-
 private _seekerTerminalRange = getNumber (_seekerConfig >> "terminalRange");
 private _seekerTerminalAngle = getNumber (_seekerConfig  >> "terminalAngle");
-//private _seekerArray = [_name, _tracking, _trackDirection, _trackPoint, _terminalRange, _terminalAngle, _seekerMisc];
-private _seekerArray = [_seekerName, _seekerFunction, false, [0,0,0], [0,0,0], _terminalRange, _terminalAngle, []];
+//private _seekerArray = [_name, seekerFunction, _tracking, _trackObject, _trackPoint, _trackDirection, _terminalRange, _terminalAngle, _seekerMisc];
+private _seekerArray = [_seekerName, _seekerFunction, false, objNull, [0,0,0], [0,0,0], _seekerTerminalRange, _seekerTerminalAngle, []];
 
 [_seekerArray, _sensorArray];

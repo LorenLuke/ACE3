@@ -1,7 +1,19 @@
 class CfgAmmo {
     class MissileBase;
 
-    class M_PG_AT: MissileBase {};
+    class M_PG_AT: MissileBase {
+        
+        irLock = 0;
+        laserLock = 0;
+        manualControl = 0;
+        class ADDON {
+            enabled = 1;
+            degreesPerSecond = 20;
+            // Guidance type for munitions
+            seekerType = "SALH_generic";
+            attackProfile = "LIN";
+        };
+    };
 
     class ACE_Hydra70_DAGR: M_PG_AT {
         displayName = CSTRING(Hydra70_DAGR);
@@ -10,9 +22,6 @@ class CfgAmmo {
         description = CSTRING(Hydra70_DAGR_Desc);
         descriptionShort = CSTRING(Hydra70_DAGR_Desc);
 
-        irLock = 0;
-        laserLock = 0;
-        manualControl = 0;
         maxSpeed = 300;
 
         EGVAR(rearm,caliber) = 70;
@@ -112,7 +121,47 @@ class CfgAmmo {
         };
     };
 
+    class Missile_AA_04_F: MissileBase {
+        class ADDON {
+            enabled = 1;
+            degreesPerSecond = 30;
+            // Guidance type for munitions
+            seekerType = "Sidewinder";
+            attackProfile = "AIM";
+        };
+    };
+
     class ammo_Missile_ShortRangeAABase: MissileBase {
+        class ADDON {
+            enabled = 1;
+            degreesPerSecond = 30;
+            // Guidance type for munitions
+            seekerType = "Sidewinder";
+            attackProfile = "AIM";
+        };
+    };
+    
+    class ammo_Missile_BIM9X: ammo_Missile_ShortRangeAABase {
+        class ADDON {
+            enabled = 1;
+            degreesPerSecond = 35;
+            // Guidance type for munitions
+            seekerType = "SidewinderX";
+            attackProfile = "AIM";
+        };
+    };
+
+    class M_Air_AA: MissileBase {
+        class ADDON {
+            enabled = 1;
+            degreesPerSecond = 30;
+            // Guidance type for munitions
+            seekerType = "Sidewinder";
+            attackProfile = "AIM";
+        };
+    };
+
+    class ammo_Missile_MediumRangeAABase: MissileBase {
         class ADDON {
             enabled = 1;
             degreesPerSecond = 20;
@@ -139,7 +188,7 @@ class CfgAmmo {
     class Bomb_04_F: ammo_Bomb_LaserGuidedBase {
         class ADDON {
             enabled = 1;
-            degreesPerSecond = 4;
+            degreesPerSecond = 5;
             // Guidance type for munitions
             seekerType = "SALH_generic";
             attackProfile = "GBU";
@@ -150,7 +199,7 @@ class CfgAmmo {
     class ammo_Bomb_SDB: ammo_Bomb_SmallDiameterBase {
         class ADDON {
             enabled = 1;
-            degreesPerSecond = 7;
+            degreesPerSecond = 9;
             // Guidance type for munitions
             seekerType = "GPS_generic";
             attackProfile = "GBU";

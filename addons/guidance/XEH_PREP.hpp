@@ -1,8 +1,10 @@
 
 PREP(checkPreGuidance);
+PREP(checkLOS);
 PREP(extractInfo);
 PREP(updateTargets);
 PREP(guidancePFH);
+PREP(runSeeker);
 PREP(runSensorSearch);
 PREP(sensorType_SALH);
 PREP(sensorType_GPS);

@@ -84,7 +84,7 @@ class GVAR(SensorTypes) {
 class GVAR(SeekerTypes) {
     class generic {
         functionName = QFUNC(seekerType_UNGUIDED);
-        //sensor name, range, angle, terminal sensor, active on rail, data linked; -1 for ignore/use default;
+        // [sensor name, range, angle, terminal sensor, active on rail, data linked]; -1 for ignore/use default;
         sensors[] = {};
         terminalRange = -1; //range /FROM LAUNCH POINT/ to where terminal seekers kick in
         terminalAngle = -1; //when vector to target and missile vector are this far apart anguglarly, kick in terminal seekers;
@@ -146,14 +146,20 @@ class GVAR(SeekerTypes) {
     
     class Sidewinder: generic {
         sensors[] = {{"INS", -1, -1, 0, 1, 0}, {"IR", -1, -1, 1, 1, 0}};
-        terminalRange = 1000;
-        terminalAngle = 0.2;
+        terminalRange = 300;
+        terminalAngle = 0.05;
         functionName = QFUNC(seekerType_AIM9);
     };
     class SidewinderX: Sidewinder {
-        sensors[] = {{"INS", -1, -1, 0, 1, 0}, {"IR", -1, 160, 1, 1, 0}};
+        sensors[] = {{"INS", -1, -1, 0, 1, 0}, {"IR", -1, 180, 1, 1, 0}};
         functionName = QFUNC(seekerType_AIM9X);
+        terminalRange = 2000;
+        terminalAngle = 0.002;
     };
+    class AAMRAAM: generic {
+        
+    };
+    
     class Stinger: generic {
         sensors[] = {{"IR", -1, -1, 0, 1, 0}};
     };

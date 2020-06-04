@@ -3,13 +3,12 @@
 
 params ["_unit"];
 
-
-
-_unit = vehicle _unit;
-_weapon = currentWeapon _unit;
+//_unit = vehicle _unit;
+_vehicle = vehicle _unit;
+_weapon = currentWeapon _vehicle;
 _mode = currentWeaponMode _unit;
 _muzzle = currentMuzzle _unit;
-_magazine = currentMagazine _unit;
+_magazine = currentMagazine _vehicle;
 private _ammo = getText (configFile >> "CfgMagazines" >> _magazine >> "ammo");
 private _addonConfig = (configFile >> "CfgAmmo" >> _ammo >> QUOTE(ADDON));
 private _enabled = getNumber (_addonConfig >> "enabled");
@@ -17,10 +16,10 @@ _unit setVariable [QGVAR(guidanceArray), nil];
 if (_enabled < 1) exitWith {};
 
 if ( !isPlayer _unit && { (_enabled < 2) } ) exitWith {};
+//if ( _unit ammo currentMuzzle _unit <= 0 ) exitWith {};
 
 
-
-private _eh = [_unit, _weapon, _muzzle, _mode, _ammo, _magazine, objNull, _unit];
+private _eh = [_vehicle, _weapon, _muzzle, _mode, _ammo, _magazine, objNull, _unit];
 private _timeArray = [0, time, diag_tickTime]; //runtimeDelta, lastTime, lastTickTime
 
 _targetArray = _eh call FUNC(updateTargets);
@@ -51,5 +50,5 @@ private _degreesPerSecond = getNumber (_addonConfig >> "degreesPerSecond");
 private _flightArray = [_degreesPerSecond, [0,0,0]];
 private _args = [_eh, _timeArray, _targetArray, _seekerArray, _sensorArray, _profileArray, _launchArray, _flightArray];
 private _pfID = [FUNC(guidancePFH), 0, _args] call CBA_fnc_addPerFrameHandler;
-hint format ["%1", _degreesPerSecond];
-_unit setVariable [QGVAR(guidanceArray), [_args, _pfID]];
+
+_vehicle setVariable [QGVAR(guidanceArray), [_args, _pfID]];

@@ -25,11 +25,14 @@ if ( !(_targetVector isEqualTo [0,0,0]) ) then {
 if (_tracking) then {
     _lookDirection = _trackDirection;
 };
-_x set [4, _lookDirection];
+
+_seekerArray set [4, _lookDirection];
 private _sensorTargetReturnPos = [_pos, _normalLookDirection, _angle/2, _range, _eh, _seekerArray, _selectedTargetArray, _sensorMisc] call (missionNamespace getVariable _sensorFunction);
 //private _sensorTargetReturnPos = [_pos, _normalLookDirection, _lookDirection, _angle/2, _range] call _sensorFunction;
 
 _sensorTargetVector = _pos vectorFromTo _sensorTargetReturnPos;
+
+drawIcon3D ["\a3\ui_f\data\IGUI\Cfg\Cursors\selectover_ca.paa", [0,0,1,1], ASLtoAGL _sensorTargetReturnPos, 0.75, 0.75, 0, _sensorFunction, 1, 0.025, "TahomaB"];
 
 //return pos, return vector
 [_sensorTargetReturnPos, _sensorTargetVector];
