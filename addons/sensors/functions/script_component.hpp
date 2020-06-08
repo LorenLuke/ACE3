@@ -1,0 +1,1 @@
+#include "\z\ace\addons\sensors\script_component.hpp"
